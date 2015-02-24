@@ -48,7 +48,6 @@ var Cargo = function(oController){
 			        }}),
 			        new sap.ui.commons.Button({text: "Insert",style: sap.ui.commons.ButtonStyle.Accept,  press: function() { 
 			        	var modelData = this.getModel().getData(); 
-			        	console.log(modelData);
 			        	var rowCount   = modelData.modelData.length;    
 			        	rowCount = rowCount + 1;  
 			        	aDataCargo.push({sNo: rowCount, cargoNam: " "}); // Push data to Model  
@@ -65,7 +64,6 @@ var Cargo = function(oController){
 			        		m.setData({modelData: data});
 //			        		m.setData(data);
 //			        		sap.m.MessageToast.show(JSON.stringify(removed[0]) +  'is removed');
-			        		console.log(removed[0]);
 			        	} else {
 //			        		sap.m.MessageToast.show('Please select a row');
 			        	}
@@ -92,8 +90,15 @@ var Cargo = function(oController){
     		if(changedValue!=""){
 	    		var portModel = window.oPortTable.getModel();
 	    		var portModelData = portModel.getData()['modelData']; 
+	    		var rowObj = oController.checkIfRowExist(portModelData,rowIndex,"Loading");
 	    		var rowCount   = portModelData.length;   //4 
-	    		portModelData[rowCount] = {sNo:rowCount+1,cType:"Loading", coord: changedValue};
+	    		if(rowObj["result"]){
+	    			var prod = rowObj["product"];
+	    			prod['coord'] = changedValue;
+	    			portModelData[rowObj["index"]] = prod;
+	    		}else{
+	    			portModelData[rowCount] = {sNo:rowCount+1,cType:"Loading", coord: changedValue,cargoRow:rowIndex};
+	    		}
 	        	portModel.setData({modelData: portModelData}); // Set Model  
 	        	window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
 	        	portModel.refresh();
@@ -116,8 +121,15 @@ var Cargo = function(oController){
     		if(changedValue!=""){
 	    		var portModel = window.oPortTable.getModel();
 	    		var portModelData = portModel.getData()['modelData']; 
+	    		var rowObj = oController.checkIfRowExist(portModelData,rowIndex,"Discharging");
 	    		var rowCount   = portModelData.length;   //4 
-	    		portModelData[rowCount] = {sNo:rowCount+1,cType:"Discharging", coord: changedValue};
+	    		if(rowObj["result"]){
+	    			var prod = rowObj["product"];
+	    			prod['coord'] = changedValue;
+	    			portModelData[rowObj["index"]] = prod;
+	    		}else{
+	    			portModelData[rowCount] = {sNo:rowCount+1,cType:"Discharging", coord: changedValue,cargoRow:rowIndex};
+	    		}
 	        	portModel.setData({modelData: portModelData}); // Set Model  
 //	        	window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
 	        	portModel.refresh();
@@ -339,7 +351,6 @@ var Cargo = function(oController){
 	        var rowCount   = modelData.modelData.length;    
 //	        rowCount = rowCount + 1;
 	        var children = ui.helper.context.children[1].children;
-	        console.log("children",children);
 	        aDataCargo.push({sNo:rowCount+1,account: $(children[0]).text(),cargoNam:$(children[1]).text(),loadPort:$(children[2]).text(),distPort:$(children[3]).text()}); // Push data to Model  
         	oModel.setData({modelData: aDataCargo}); // Set Model  
 //        	oTableCargo.setVisibleRowCount(oTableCargo.getVisibleRowCount()+1);
@@ -347,16 +358,30 @@ var Cargo = function(oController){
         	
         	var portModel = window.oPortTable.getModel();
     		var portModelData = portModel.getData()['modelData']; 
-    		var rowCount   = portModelData.length;   //4 
-    		portModelData[rowCount] = {sNo:rowCount+1,cType:"Loading", coord: $(children[2]).text()};
+    		var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Loading");
+    		var rowCount1   = portModelData.length;   //4 
+    		if(rowObj["result"]){
+    			var prod = rowObj["product"];
+    			prod['coord'] = $(children[2]).text();
+    			portModelData[rowObj["index"]] = prod;
+    		}else{
+    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Loading", coord: $(children[2]).text(),cargoRow:rowCount};
+    		}
         	portModel.setData({modelData: portModelData}); // Set Model  
         	window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
         	portModel.refresh();
         	
         	var portModel = window.oPortTable.getModel();
     		var portModelData = portModel.getData()['modelData']; 
-    		var rowCount   = portModelData.length;   //4 
-    		portModelData[rowCount] = {sNo:rowCount+1,cType:"Discharging", coord: $(children[3]).text()};
+    		var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Discharging");
+    		var rowCount1   = portModelData.length;   //4 
+    		if(rowObj["result"]){
+    			var prod = rowObj["product"];
+    			prod['coord'] = $(children[3]).text();
+    			portModelData[rowObj["index"]] = prod;
+    		}else{
+    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Discharging", coord: $(children[3]).text(),cargoRow:rowCount};
+    		}
         	portModel.setData({modelData: portModelData}); // Set Model  
 //        	window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
         	portModel.refresh();

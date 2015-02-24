@@ -170,9 +170,11 @@ var oPortTableDistEca = new sap.ui.commons.TextField({
 		var model = oPortTable.getModel();
 		var data = oPortTable.getModel().getData()['modelData'];
 		data[rowIndex]['distEca']=changedValue;
-		if(data[rowIndex]['distEca']!=undefined&&data[rowIndex]['spd']!=undefined){
+		if(data[rowIndex]['distEca']!=undefined&&data[rowIndex]['spd']!=undefined&&data[rowIndex]['distEca']!=""&&data[rowIndex]['spd']!=""){
 			var days = (data[rowIndex]['distEca']/data[rowIndex]['spd'])/24;
 			data[rowIndex]['sea'] = Math.round(days * 100) / 100;
+		}else{
+			data[rowIndex]['sea'] = 0;
 		}
 		model.setData({modelData: data});
 		model.refresh();
@@ -197,9 +199,11 @@ var oPortTableSpd = new sap.ui.commons.TextField({
 		var model = oPortTable.getModel();
 		var data = oPortTable.getModel().getData()['modelData'];
 		data[rowIndex]['spd']=changedValue;
-		if(data[rowIndex]['distEca']!=undefined&&data[rowIndex]['spd']!=undefined){
+		if(data[rowIndex]['distEca']!=undefined&&data[rowIndex]['spd']!=undefined&&data[rowIndex]['distEca']!=""&&data[rowIndex]['spd']!=""){
 			var days = (data[rowIndex]['distEca']/data[rowIndex]['spd'])/24;
 			data[rowIndex]['sea'] = Math.round(days * 100) / 100;
+		}else{
+			data[rowIndex]['sea'] = 0;
 		}
 		model.setData({modelData: data});
 		model.refresh();
