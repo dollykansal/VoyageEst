@@ -1,4 +1,4 @@
-var TblPortRot = function(){
+var TblPortRot = function(oController){
 var aData = [
 //  {sNo: "1", ComboBox: "Ballast", coord: "Hot Coil", distEca:"32,000.00"}
 ];
@@ -62,7 +62,6 @@ var oPortTable = window.helper.createTable({
                 aData[idx] = {sNo: rowCount};
                 //aData.push({sNo: rowCount},idx); // new blank row at idx = 2, position = 3
                 for (i = idx+1; i <= rowCount-1; i++) {
-                  console.log("new row at index :", i, " is:", temp );
                   var temp1 = aData[i];
                   aData[i] = temp; 
                   temp = temp1;
@@ -173,6 +172,7 @@ var oPortTableDistEca = new sap.ui.commons.TextField({
 		if(data[rowIndex]['distEca']!=undefined&&data[rowIndex]['spd']!=undefined&&data[rowIndex]['distEca']!=""&&data[rowIndex]['spd']!=""){
 			var days = (data[rowIndex]['distEca']/data[rowIndex]['spd'])/24;
 			data[rowIndex]['sea'] = Math.round(days * 100) / 100;
+			oController.calcTotalDays();
 		}else{
 			data[rowIndex]['sea'] = 0;
 		}
@@ -202,6 +202,7 @@ var oPortTableSpd = new sap.ui.commons.TextField({
 		if(data[rowIndex]['distEca']!=undefined&&data[rowIndex]['spd']!=undefined&&data[rowIndex]['distEca']!=""&&data[rowIndex]['spd']!=""){
 			var days = (data[rowIndex]['distEca']/data[rowIndex]['spd'])/24;
 			data[rowIndex]['sea'] = Math.round(days * 100) / 100;
+			oController.calcTotalDays();
 		}else{
 			data[rowIndex]['sea'] = 0;
 		}
@@ -217,7 +218,7 @@ oPortTable.addColumn(new sap.ui.table.Column("spd",{
 	width: "40px" }));
 
 //oPortTable.addColumn(window.helper.createColumn("spd", "Spd", "40px", "TF"));
-oPortTable.addColumn(window.helper.createColumn("sea", "Sea", "40px", "TF"));
+oPortTable.addColumn(window.helper.createColumn("sea", "Sea", "40px", "TV"));
 
 /*sColumnId = 'Distance';
 oPortTable.addColumn(new sap.ui.table.Column({
@@ -292,12 +293,32 @@ oPortTable.addColumn(window.helper.createColumn("des", "Des", "40px", "TF"));
 oPortTable.addColumn(window.helper.createColumn("portChg", "Port charge", "40px", "TF"));
 oPortTable.addColumn(window.helper.createColumn("arrival", "Arrival", "40px", "TF"));
 oPortTable.addColumn(window.helper.createColumn("departure", "Departure", "40px", "TF"));
-
+/*if (isNaN(value)) {  
+    return 0;  
+}  
+         var numberFormat = sap.ui.core.format.NumberFormat.getIntegerInstance({  
+             maxIntegerDigits: 10,  
+             minIntegerDigits: 1,  
+             maxFractionDigits: 2,  
+             minFractionDigits: 2,  
+             groupingEnabled: true  
+         });  
+         return numberFormat.format(value);  
+*new sap.ui.commons.Label({text: "Total days"}),
+*/
 
 window.oPortTable = oPortTable;
 oPortTable.setModel(oModel);
 oPortTable.bindRows("/modelData");
 
+///////////////////////////////set total in footer////////////////////////////////////////////////////////
+var oLblTot = new sap.ui.commons.Label({text: "Total days"});
+var oTotal = new sap.ui.commons.TextField({value: "{model>/totDays}", editable: false,width : '90%'});
+var oMatrix = new sap.ui.commons.layout.MatrixLayout({layoutFixed : true,width : '100%',columns : 3});
+
+oMatrix.setWidths('10%','15%', '75%');
+oMatrix.createRow(oLblTot,oTotal);
+oPortTable.setFooter(oMatrix);
 //Initially sort the table
 //oPortTable.sort(oPortTable.getColumns()[0]);
 oPanel.addContent(oPortTable);

@@ -26,7 +26,7 @@ sap.ui.jsview("voyageest.Estimate1", {
 
 		var cargo = new Cargo(oController);
 		//var treetable = new TreeTableHelper();
-		var tblPortRot = new TblPortRot();
+		var tblPortRot = new TblPortRot(oController);
 		oLayoutM.createRow(cargo,{height: "auto"} );
 		oLayoutM.createRow(tblPortRot,{height: "300px"} ); //{height: "300px"}, 
 		
@@ -55,7 +55,7 @@ sap.ui.jsview("voyageest.Estimate1", {
 			alert('Alert from Back button' );
 					}
 				});
-		var oSummary = new summary();
+		var oSummary = new summary(oController);
 		
 		return [button1,header, oDivider1,oLayoutH,oSummary];;
 	

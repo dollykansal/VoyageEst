@@ -54,6 +54,36 @@ var TableHelper = function(){
 			});
 		}
 	},
+	this.createColumn1 = function(name,title,width,template){
+		if(template=="TV"){
+			return new sap.ui.table.Column({
+				label: new sap.ui.commons.Label({text: title}),
+				template: new sap.ui.commons.TextView().bindProperty("text", name),
+				sortProperty: name,
+				filterProperty: name,
+				width: width
+			});
+		}else if(template == "TF"){
+			var textField = new sap.ui.commons.TextField();
+			textField.bindProperty("value", name);
+			return new sap.ui.table.Column({
+				label: new sap.ui.commons.Label({text: title}),
+				template:textField,
+				sortProperty: name,
+				filterProperty: name,
+				width: width
+			});
+		}else if(template == "CH"){
+			return new sap.ui.table.Column({
+				label: new sap.ui.commons.Label({text: title}),
+				template: new sap.ui.commons.CheckBox().bindProperty("checked", name),
+				sortProperty: name,
+				filterProperty: name,
+				width:  width,
+				hAlign: "Center"
+			});
+		}
+	},
 	this.createRadioButton = function(tooltip){
 		return new sap.ui.commons.RadioButtonGroup({
 			tooltip : tooltip,

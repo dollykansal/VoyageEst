@@ -36,14 +36,11 @@ sap.ui.controller("voyageest.Estimate", {
 //	}
 	selectVessel: function(vesselname) {
 		// this is the vessel selected
-		console.log(vesselname);
-		
 		// now change the selection in second table as well
 		// get the vessel name done
 		// push it to oData ( new json model to be defined here)
 		var aDataVess = [];
 		var oModel = new sap.ui.model.json.JSONModel();
-		console.log("this is inside : ",vesselname );
 		aDataVess.push({mv: vesselname});
 		oModel.setData({modelData: aDataVess});
 		//get reference to the table in the final_vessel.js and do binding
@@ -51,8 +48,6 @@ sap.ui.controller("voyageest.Estimate", {
 		var panel = this.getView().getContent()[1];
 		var matrix = panel.getContent()[0];
 		var table1 = ((matrix.getRows()[0]).getCells()[0]).getContent()[0];
-		console.log("this is table:", table1);
-		console.log("still:",sap.ui.getCore().byId("estViewId1"))
 		//console.log(view1.byId("iddemo"));
 		table1.setModel(oModel); 
 	},

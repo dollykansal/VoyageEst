@@ -8,6 +8,7 @@
 <!----------------------------------------- bootstrap code --------------------------------------------------->
 <script src="resources/sap-ui-core.js" id="sap-ui-bootstrap"
 	data-sap-ui-libs="sap.ui.commons,sap.ui.table,sap.viz,sap.suite.ui.commons,sap.ui.ux3"
+	data-sap-ui-xx-bindingSyntax="complex"
 	data-sap-ui-theme="sap_goldreflection" data-sap-ui-debug=true>
 </script>
 <!------------------------------- include javascript files with UI elements ---------------------------------->
@@ -230,8 +231,8 @@
 		//oMatrix.createRow(oTable);
 		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				var c = sap.ui.commons; /* shorthand */
-				function checkClose() {
-					var reallyClose = confirm("Close Freight Simulator?")
+				function checkClose(code) {
+					var reallyClose = confirm("Close "+code+" ?")
 /* 					if (!reallyClose && oEvent) { // if called as event handler, tell the event to not proceed
 						oEvent.preventDefault();
 					} */
@@ -253,7 +254,7 @@
 						}}), */
 						new c.Button("cancelButton", {text:"Cancel",press:function(){
 							// simulate a case where cancelling is not allowed, e.g. because of unsaved data
-							var reallyClose = checkClose(); 
+							var reallyClose = checkClose("Freight Simulator"); 
 							if (reallyClose) {
 								oFrtSim.close();
 							}
@@ -281,7 +282,7 @@
 						}}), */
 						new c.Button("cancelBunkButton", {text:"Cancel",press:function(){
 							// simulate a case where cancelling is not allowed, e.g. because of unsaved data
-							var reallyCloseB = checkClose(); 
+							var reallyCloseB = checkClose("Bunker Simulator"); 
 							if (reallyCloseB) {
 								oBunkSim.close();
 							}
