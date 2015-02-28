@@ -1,19 +1,14 @@
 var Bunker = function(){
 	this.createBunker = function(){
 		var vessel = sap.ui.getCore().getModel("vessel");
-		var oModel = new sap.ui.model.json.JSONModel();
-		oModel.setData({data1: vessel['oData']['data1'],data2:vessel['oData']['data2'],data3:vessel['oData']['data3'],data4:vessel['oData']['data4']});
 		var oTableVess = window.helper.createTable({
 			//title: "Selected Vessel Particular",
 			});
-//		Define the columns and the control templates to be used
-		var oColumn = window.helper.createColumn("mv", "MV", "100px", "TV");
-		oTableVess.addColumn(oColumn);
+		oTableVess.addColumn(window.helper.createColumn("mv", "MV", "100px", "TV"));
 		oTableVess.addColumn(window.helper.createColumn("type", "Type", "50px", "TF"));
 		oTableVess.addColumn(window.helper.createColumn("dwt", "DWT", "50px", "TF"));
 		oTableVess.addColumn(window.helper.createColumn("draft", "Draft", "50px", "TF"));
-
-		oTableVess.setModel(oModel);
+		oTableVess.setModel(vessel);
 		oTableVess.bindRows("/data1");
 //		Initially sort the table
 		oTableVess.sort(oTableVess.getColumns()[0]);
@@ -28,7 +23,7 @@ var Bunker = function(){
 		var oTableMode = window.helper.createTable();
 		oTableMode.addColumn(window.helper.createColumn("ballast", "Ballast", "60px", "TV"));
 		oTableMode.addColumn(window.helper.createColumn("laden", "Laden", "60px", "TF"));
-		oTableMode.setModel(oModel);
+		oTableMode.setModel(vessel);
 		oTableMode.bindRows("/data2");
 		//Initially sort the table
 		oTableMode.sort(oTableMode.getColumns()[0]);
@@ -44,7 +39,7 @@ var Bunker = function(){
 
 
 		//Create a model and bind the table rows to this model
-		oTableDo.setModel(oModel);
+		oTableDo.setModel(vessel);
 		oTableDo.bindRows("/data3");
 
 		//Initially sort the table
@@ -62,7 +57,7 @@ var Bunker = function(){
 		oTableFo.addColumn(window.helper.createColumn("work", "Work", "50px", "TF"));
 
 		//Create a model and bind the table rows to this model
-		oTableFo.setModel(oModel);
+		oTableFo.setModel(vessel);
 		oTableFo.bindRows("/data4");
 	/////////////////////////////////////////ROB & Suppply Table  ///////////////////////////////////////////////////////////////////
 	
