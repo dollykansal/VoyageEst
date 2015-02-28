@@ -33,6 +33,10 @@ display: none !important;
 .ui-draggable-dragging {
     z-index:99999;
 }
+#bunkSim{
+	height:600px;
+	overflow: scroll;
+}
 /* #vesselmode_1{
 top: 23px;
 width: 25px;
