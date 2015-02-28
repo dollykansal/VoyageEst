@@ -353,13 +353,70 @@ var Cargo = function(oController){
 		sap.ui.table.Table.prototype.onAfterRendering.apply(this, arguments);
     	$('#cargo').droppable({
 	      drop:function(event, ui){
-	    	var modelData = oModel.getData();  
-	        var rowCount   = modelData.modelData.length;    
-//	        rowCount = rowCount + 1;
-	        var children = ui.helper.context.children[1].children;
-	        aDataCargo.push({sNo:rowCount+1,account: $(children[0]).text(),cargoNam:$(children[1]).text(),loadPort:$(children[2]).text(),distPort:$(children[3]).text()}); // Push data to Model  
+	        console.log(ui);
+	        var text1 = null;
+	        var text2 = null;
+	        var text3 = null;
+	        var text4 = null;
+	        	
+	        if(ui.helper.context.children[1]==undefined){
+	        	console.log("entering");
+	        	var id = ui.helper.context.id;
+	        	$("#"+id+"-hdr").trigger("click");
+//	        	console.log("#"+id+"-cont span");
+//	        	console.log(ui.helper.context.children[1].children);
+	        	console.log($($("#"+id+"-cont span")));
+	        	setTimeout(function(){
+	        		text1 = $($("#"+id+"-cont span")[0]).text();
+		        	text2 = $($("#"+id+"-cont span")[1]).text();
+		        	text3 = $($("#"+id+"-cont span")[2]).text();
+		        	text4 = $($("#"+id+"-cont span")[3]).text();
+		        	var modelData = oModel.getData();  
+			        var rowCount   = modelData.modelData.length;
+			        aDataCargo.push({sNo:rowCount+1,account: text1,cargoNam:text2,loadPort:text3,distPort:text4}); // Push data to Model  
+		        	oModel.setData({modelData: aDataCargo}); // Set Model  
+		        	oModel.refresh();
+		        	
+		        	var portModel = window.oPortTable.getModel();
+		    		var portModelData = portModel.getData()['modelData']; 
+		    		var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Loading");
+		    		var rowCount1   = portModelData.length;   //4 
+		    		if(rowObj["result"]){
+		    			var prod = rowObj["product"];
+		    			prod['coord'] = text3;
+		    			portModelData[rowObj["index"]] = prod;
+		    		}else{
+		    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Loading", coord: text3,cargoRow:rowCount};
+		    		}
+		        	portModel.setData({modelData: portModelData}); // Set Model  
+		        	window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
+		        	portModel.refresh();
+		        	
+		        	var portModel = window.oPortTable.getModel();
+		    		var portModelData = portModel.getData()['modelData']; 
+		    		var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Discharging");
+		    		var rowCount1   = portModelData.length;   //4 
+		    		if(rowObj["result"]){
+		    			var prod = rowObj["product"];
+		    			prod['coord'] = text4;
+		    			portModelData[rowObj["index"]] = prod;
+		    		}else{
+		    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Discharging", coord: text4,cargoRow:rowCount};
+		    		}
+		        	portModel.setData({modelData: portModelData}); // Set Model  
+		        	portModel.refresh();
+	        	},100);
+	        }else{
+	        	var children = ui.helper.context.children[1].children;
+	        	text1 = $(children[0]).text();
+	        	text2 = $(children[1]).text();
+	        	text3 = $(children[2]).text();
+	        	text4 = $(children[3]).text();
+	       
+	        var modelData = oModel.getData();  
+	        var rowCount   = modelData.modelData.length;
+	        aDataCargo.push({sNo:rowCount+1,account: text1,cargoNam:text2,loadPort:text3,distPort:text4}); // Push data to Model  
         	oModel.setData({modelData: aDataCargo}); // Set Model  
-//        	oTableCargo.setVisibleRowCount(oTableCargo.getVisibleRowCount()+1);
         	oModel.refresh();
         	
         	var portModel = window.oPortTable.getModel();
@@ -368,10 +425,10 @@ var Cargo = function(oController){
     		var rowCount1   = portModelData.length;   //4 
     		if(rowObj["result"]){
     			var prod = rowObj["product"];
-    			prod['coord'] = $(children[2]).text();
+    			prod['coord'] = text3;
     			portModelData[rowObj["index"]] = prod;
     		}else{
-    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Loading", coord: $(children[2]).text(),cargoRow:rowCount};
+    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Loading", coord: text3,cargoRow:rowCount};
     		}
         	portModel.setData({modelData: portModelData}); // Set Model  
         	window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
@@ -383,14 +440,14 @@ var Cargo = function(oController){
     		var rowCount1   = portModelData.length;   //4 
     		if(rowObj["result"]){
     			var prod = rowObj["product"];
-    			prod['coord'] = $(children[3]).text();
+    			prod['coord'] = text4;
     			portModelData[rowObj["index"]] = prod;
     		}else{
-    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Discharging", coord: $(children[3]).text(),cargoRow:rowCount};
+    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Discharging", coord: text4,cargoRow:rowCount};
     		}
         	portModel.setData({modelData: portModelData}); // Set Model  
-//        	window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
         	portModel.refresh();
+	        }
 	      }
 	    });
 	  };
