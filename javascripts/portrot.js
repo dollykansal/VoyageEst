@@ -31,6 +31,7 @@ oPanel.addButton( oButton1);
 //Create a model and bind the table rows to this model
 var oModel = new sap.ui.model.json.JSONModel();
 oModel.setData({modelData: aData});
+sap.ui.getCore().setModel(oModel, "port"); 
 ////////////////////////////////////////////@todo: use float///////////////////
 /*var oExoticDecimalTypeForUS = new sap.ui.model.type.Float({
     groupingEnabled: true,

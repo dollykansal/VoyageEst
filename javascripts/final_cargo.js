@@ -419,8 +419,7 @@ var Cargo = function(oController){
         	oModel.setData({modelData: aDataCargo}); // Set Model  
         	oModel.refresh();
         	
-        	var portModel = window.oPortTable.getModel();
-    		var portModelData = portModel.getData()['modelData']; 
+    		var portModelData = sap.ui.getCore().getModel("port")['modelData']; 
     		var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Loading");
     		var rowCount1   = portModelData.length;   //4 
     		if(rowObj["result"]){
@@ -430,12 +429,8 @@ var Cargo = function(oController){
     		}else{
     			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Loading", coord: text3,cargoRow:rowCount};
     		}
-        	portModel.setData({modelData: portModelData}); // Set Model  
-        	window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
-        	portModel.refresh();
-        	
-        	var portModel = window.oPortTable.getModel();
-    		var portModelData = portModel.getData()['modelData']; 
+
+    		var portModelData = sap.ui.getCore().getModel("port")['modelData'];  
     		var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Discharging");
     		var rowCount1   = portModelData.length;   //4 
     		if(rowObj["result"]){
@@ -445,8 +440,6 @@ var Cargo = function(oController){
     		}else{
     			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Discharging", coord: text4,cargoRow:rowCount};
     		}
-        	portModel.setData({modelData: portModelData}); // Set Model  
-        	portModel.refresh();
 	        }
 	      }
 	    });
