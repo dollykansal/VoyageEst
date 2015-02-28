@@ -26,7 +26,7 @@ var summary = function(oController){
 	});
 
 	var oInput = new sap.ui.commons.TextField({
-		value : "{model>/demDes}",
+		value : "{modelSumm>/demDes}",
 		editable : false,
 		width : '100%'
 	});
@@ -36,7 +36,7 @@ var summary = function(oController){
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/sumBunkExp}",
 		editable : false,
 		width : '100%'
 			
@@ -50,7 +50,7 @@ var summary = function(oController){
 	});
 
 	var oInput = new sap.ui.commons.TextField("aComm",{
-		value: "{model>/aComm}",
+		value: "{modelSumm>/aComm}",
 		editable : false,
 		width : '100%'
 	});
@@ -71,7 +71,7 @@ var summary = function(oController){
 		text : 'Brokerage'
 	});
 	var oInput = new sap.ui.commons.TextField({
-		value : "{model>/brkg}",
+		value : "{modelSumm>/brkg}",
 		editable : false,
 		width : '100%'
 	});
@@ -92,7 +92,7 @@ var summary = function(oController){
 		text : 'Freight tax'
 	});
 	var oInput = new sap.ui.commons.TextField({
-		value : "{model>/frTax}",
+		value : "{modelSumm>/frTax}",
 		editable : false,
 		width : '100%'
 	});
@@ -194,6 +194,7 @@ var summary = function(oController){
 				modelSumm.setProperty("/FoExpense",(this.getValue()*cons));
 			}
 			sap.ui.getCore().setModel(modelSumm, "modelSumm"); 
+			oController.sumBunkExp();
 		}
 	
 	});
@@ -344,7 +345,8 @@ var summary = function(oController){
 	});
 	var oInput = new sap.ui.commons.TextField({
 		value : '0.00',
-		width : '100%'
+		width : '100%',
+		editable : false
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
@@ -386,20 +388,25 @@ var summary = function(oController){
 
 	//Create a simple form within the layout
 	var oLabel = new sap.ui.commons.Label({
-		text : 'Hire/Day'
+		text : 'Hire/Day',
+		tooltip: 'Input daily hire cost'
 	});
 
 	var oInput = new sap.ui.commons.TextField({
 		value : '0.00',
-		width : '100%'
+		width : '100%',
+		change : function(oEvent){
+			oController.doHirCalc(this.getValue(),null);
+		}
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'Total Revenue'
+		text : 'Total Revenue',
+		tooltip: 'Quantity * Freight'
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/rev}",
 		editable : false,
 		width : '100%'
 	});
@@ -408,20 +415,25 @@ var summary = function(oController){
 
 	//Create a simple form within the layout
 	var oLabel = new sap.ui.commons.Label({
-		text : 'H/Add Comm.'
+		text : 'H/Add Comm. %',
+		tooltip: 'Input Address Comm. on daily hire cost'
 	});
 
 	var oInput = new sap.ui.commons.TextField({
-		value : '0.00',
-		width : '100%'
+		//value : "{modelSumm>/hirDay}",
+		width : '100%',
+		change : function(oEvent){
+			oController.doHirCalc(null,this.getValue());
+		}
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'Op. Expense'
+		text : 'Op. Expense',
+		tooltip: ' Sum of all values in the Operation Expense Panel (all expenses excluding hirage)'
 	});
-
+	
 	var oInput1 = new sap.ui.commons.TextField({
-		value : "{model>/opExp}",
+		value : "{modelSumm>/opExp}",
 		editable : false,
 		width : '100%'
 	});
@@ -430,20 +442,22 @@ var summary = function(oController){
 
 	//Create a simple form within the layout
 	var oLabel = new sap.ui.commons.Label({
-		text : 'Net Hire'
+		text : 'Net Hire',
+		tooltip: 'Daily net hire amount'
 	});
 	var oInput = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/netHire}",
 		editable : false,
 		width : '100%'
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'Op. Profit'
+		text : 'Op. Profit',
+		tooltip: 'Total Revenue - Operation Expense'
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/opProfit}",
 		editable : false,
 		width : '100%'
 	});
@@ -461,11 +475,12 @@ var summary = function(oController){
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'Total Hire'
+		text : 'Total Hire',
+		tooltip: 'Total Duration * Net Hire'
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/totHir}",
 		editable : false,
 		width : '100%'
 	});
@@ -482,11 +497,12 @@ var summary = function(oController){
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'Total Expense'
+		text : 'Total Expense',
+		tooltip: 'Operation Expense + Total Hire'
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/totExp}",
 		editable : false,
 		width : '100%'
 	});
@@ -503,11 +519,12 @@ var summary = function(oController){
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'PROFIT'
+		text : 'PROFIT',
+		tooltip: 'Total Revenue - Total Expense'
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/totProfit}",
 		editable : false,
 		width : '100%'
 	});

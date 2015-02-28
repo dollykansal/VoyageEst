@@ -156,7 +156,13 @@ var Cargo = function(oController){
 			if(data[rowIndex]['addComm']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var addComm = (data[rowIndex]['addComm'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(addComm);
+			if(data[rowIndex]['brkge']!=undefined&&data[rowIndex]['rev']!=undefined){
+				var brkge = (data[rowIndex]['brkge'] * data[rowIndex]['rev'])/100;
+			}
+			if(data[rowIndex]['frtTax']!=undefined&&data[rowIndex]['rev']!=undefined){
+				var frtTax = (data[rowIndex]['frtTax'] * data[rowIndex]['rev'])/100;
+			}
+			oController.onCargoChange(addComm,brkge,frtTax,rev);
 		}
 	});
 	oCarTabqty.bindProperty("value", "qty");
@@ -186,7 +192,7 @@ var Cargo = function(oController){
 			if(data[rowIndex]['frtTax']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var frtTax = (data[rowIndex]['frtTax'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(addComm,brkge,frtTax);
+			oController.onCargoChange(addComm,brkge,frtTax,rev);
 		}
 	});
 	oCarTabfrt.bindProperty("value", "frt");
@@ -243,7 +249,7 @@ var Cargo = function(oController){
 			if(data[rowIndex]['frtTax']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var frtTax = (data[rowIndex]['frtTax'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(addComm,brkge,frtTax);
+			oController.onCargoChange(addComm,brkge,frtTax,data[rowIndex]['rev']);
 		}
 	});
 	oCarTabrev.bindProperty("value", "rev");
@@ -272,7 +278,7 @@ var Cargo = function(oController){
 			if(data[rowIndex]['frtTax']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var frtTax = (data[rowIndex]['frtTax'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(addComm,brkge,frtTax);
+			oController.onCargoChange(addComm,brkge,frtTax,data[rowIndex]['rev']);
 		}
 	});
 	oCarTabAcomm.bindProperty("value", "addComm");
@@ -296,7 +302,7 @@ var Cargo = function(oController){
 			if(data[rowIndex]['brkge']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var brkge = (data[rowIndex]['brkge'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(null, brkge,null);
+			oController.onCargoChange(null, brkge,null,null);
 		}
 	});
 	oCarTabBrkg.bindProperty("value", "brkge");
@@ -319,7 +325,7 @@ var Cargo = function(oController){
 			if(data[rowIndex]['frtTax']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var frtTax = (data[rowIndex]['frtTax'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(null,null, frtTax);
+			oController.onCargoChange(null,null, frtTax,null);
 		}
 	});
 	oCarTabFrtTax.bindProperty("value", "frtTax");
