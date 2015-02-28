@@ -1,11 +1,8 @@
 var Bunker = function(){
 	this.createBunker = function(){
-		console.log("calling final vesselbunker");
-		var aDataVess = [
-		                 {mv: "Netpas", type: "Owned", dwt: 35000, draft: "13.00"}
-		                 ];
-
-//		creating table using helper
+		var vessel = sap.ui.getCore().getModel("vessel");
+		var oModel = new sap.ui.model.json.JSONModel();
+		oModel.setData({data1: vessel['oData']['data1'],data2:vessel['oData']['data2'],data3:vessel['oData']['data3'],data4:vessel['oData']['data4']});
 		var oTableVess = window.helper.createTable({
 			//title: "Selected Vessel Particular",
 			});
@@ -16,18 +13,10 @@ var Bunker = function(){
 		oTableVess.addColumn(window.helper.createColumn("dwt", "DWT", "50px", "TF"));
 		oTableVess.addColumn(window.helper.createColumn("draft", "Draft", "50px", "TF"));
 
-//		Create a model and bind the table rows to this model
-		var oModel = new sap.ui.model.json.JSONModel();
-		oModel.setData({modelData: aDataVess});
 		oTableVess.setModel(oModel);
-		oTableVess.bindRows("/modelData");
-
+		oTableVess.bindRows("/data1");
 //		Initially sort the table
 		oTableVess.sort(oTableVess.getColumns()[0]);
-
-		var aDataMode = [
-		                 {ballast: "20.0", laden: "10.0"}
-		                 ];
 
 		//Create a RadioButtonGroup with two options: full & Eco
 		var oRBG1 = window.helper.createRadioButton("Select Full or Eco")
@@ -39,22 +28,11 @@ var Bunker = function(){
 		var oTableMode = window.helper.createTable();
 		oTableMode.addColumn(window.helper.createColumn("ballast", "Ballast", "60px", "TV"));
 		oTableMode.addColumn(window.helper.createColumn("laden", "Laden", "60px", "TF"));
-		//oTableMode.addExtension(oRBG1);
-		//Create a model and bind the table rows to this model
-		var oModel = new sap.ui.model.json.JSONModel();
-		oModel.setData({modelData: aDataMode});
 		oTableMode.setModel(oModel);
-		oTableMode.bindRows("/modelData");
-
+		oTableMode.bindRows("/data2");
 		//Initially sort the table
 		oTableMode.sort(oTableMode.getColumns()[0]);
 	/////////////////////////////////////////DO  ///////////////////////////////////////////////////////////////////
-		console.log("calling final vessel do");
-		var aDataDo = [
-		               {vesselName: "DO", type: "", sea: "0.00", idle: "0.0", work: "0.0"},
-		               {vesselName: "LSDO", type: "", sea: "0.00", idle: "0.0", work: "0.0"}
-		               ];
-
 		//Create an instance of the table control
 		var oTableDo = window.helper.createTable({visibleRowCount: 2,firstVisibleRow: 2});
 		//Define the columns and the control templates to be used
@@ -66,21 +44,13 @@ var Bunker = function(){
 
 
 		//Create a model and bind the table rows to this model
-		var oModel = new sap.ui.model.json.JSONModel();
-		oModel.setData({modelData: aDataDo});
 		oTableDo.setModel(oModel);
-		oTableDo.bindRows("/modelData");
+		oTableDo.bindRows("/data3");
 
 		//Initially sort the table
 		oTableDo.sort(oTableDo.getColumns()[0]);
 
 	/////////////////////////////////////////FO  ///////////////////////////////////////////////////////////////////
-		console.log("calling final vessel fo");
-		var aDataFo = [
-		               {vesselName: "FO", type: "180", ballast: "20.00", laden: "10.00", idle: "1.0", work: "1.0"},
-		               {vesselName: "LSFO", type: "", ballast: "0.00", laden: "0.00", idle: "0.0", work: "0.0"}
-		               ];
-
 		//Create an instance of the table control
 		var oTableFo = window.helper.createTable({visibleRowCount: 2,firstVisibleRow: 2});
 		//Define the columns and the control templates to be used
@@ -92,10 +62,8 @@ var Bunker = function(){
 		oTableFo.addColumn(window.helper.createColumn("work", "Work", "50px", "TF"));
 
 		//Create a model and bind the table rows to this model
-		var oModel = new sap.ui.model.json.JSONModel();
-		oModel.setData({modelData: aDataFo});
 		oTableFo.setModel(oModel);
-		oTableFo.bindRows("/modelData");
+		oTableFo.bindRows("/data4");
 	/////////////////////////////////////////ROB & Suppply Table  ///////////////////////////////////////////////////////////////////
 	
 		 var aDataRob = [{ port: "Dubai", wf: "0.0%", speed: "13.0", type: "F.O"},{  port: "Dubai", wf: "0.0%", speed: "13.0", type: "D.O"},
