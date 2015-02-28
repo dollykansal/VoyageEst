@@ -1,6 +1,6 @@
 var TblPortRot = function(oController){
 var aData = [
-//  {sNo: "1", ComboBox: "Ballast", coord: "Hot Coil", distEca:"32,000.00"}
+  {sNo: "1", cType: "Ballast"}
 ];
 //Create a panel instance
 var oPanel = new sap.ui.commons.Panel({
