@@ -61,7 +61,7 @@ sap.ui.controller("voyageest.Estimate1", {
 	checkIfRowExist: function(products, cargoRowIndex, cType){
 		var row = {};
 		row["result"] = false;
-		if(products.length>0){
+		if(products!=undefined && products.length>0){
 			for(var x=0;x<products.length;x++){
 				if(products[x].cargoRow==cargoRowIndex && products[x].cType == cType){
 					row["index"] = x;
