@@ -1,6 +1,6 @@
 var Vesselavail = function(oController){
 var aData = [
-	{vesselName: "Jebel Ali", laycan: "4"},
+	{vesselName: "Jebel Ali", laycan: "4", dwt:"3"},
 	{vesselName: "Manuela", laycan: "2"},
 	{vesselName: "CMA Colomb", laycan: "1"},
 	{vesselName: "Caspian Supplier", laycan: "4"},
@@ -52,6 +52,7 @@ console.log("calling vessel avail3");
 var oModel = new sap.ui.model.json.JSONModel();
 oModel.setData({modelData: aData});
 oTableVess.setModel(oModel);
+sap.ui.getCore().setModel(oModel,"vesselMaster")
 oTableVess.bindRows("/modelData");
 
 oTableVess.setVisibleRowCount(oTableVess.getBinding("rows").getLength());
@@ -66,6 +67,9 @@ var oMsgBar = new sap.ui.commons.MessageBar("msgBar", {
 });*/
 oTableVess.attachRowSelectionChange(function(oEvent) {
 	var currentRowContext = oEvent.getParameter("rowContext"); 
+	var strArr = currentRowContext['sPath'].split("/");
+	var rowNo = strArr[strArr.length-1];
+//	console.log("row context???",currentRowContext['sPath'].split("//"));
 	var selVessName = oModel.getProperty("vesselName", currentRowContext);
 	var selDesc = oModel.getProperty("Description", currentRowContext);
 	var oMessage = new sap.ui.commons.Message({
@@ -73,7 +77,7 @@ oTableVess.attachRowSelectionChange(function(oEvent) {
 		text: "Selected Row Index: " + oEvent.getParameter("rowIndex") + selVessName
 	});
 	oMsgBar.addMessages([oMessage]);
-	oController.selectVessel(selVessName);
+	oController.selectVessel(rowNo);
 });
 
 console.log("no. of rows ", oTableVess.getBinding("rows").getLength());
