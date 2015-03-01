@@ -399,7 +399,7 @@ var Cargo = function(oController){
 
 
 	//Initially sort the table
-	oTableCargo.sort(oTableCargo.getColumns()[0]);
+	//oTableCargo.sort(oTableCargo.getColumns()[0]);
 	oTableCargo.onAfterRendering = function() {
 		sap.ui.table.Table.prototype.onAfterRendering.apply(this, arguments);
 		$('#cargo').droppable({
