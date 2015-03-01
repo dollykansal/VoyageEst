@@ -292,21 +292,46 @@ oPortTable.addColumn(window.helper.createColumn("portiw", "Port(I/W)", "40px", "
 oPortTable.addColumn(window.helper.createColumn("dem", "Dem", "40px", "TF"));
 oPortTable.addColumn(window.helper.createColumn("des", "Des", "40px", "TF"));
 oPortTable.addColumn(window.helper.createColumn("portChg", "Port charge", "40px", "TF"));
-oPortTable.addColumn(window.helper.createColumn("arrival", "Arrival", "40px", "TF"));
-oPortTable.addColumn(window.helper.createColumn("departure", "Departure", "40px", "TF"));
-/*if (isNaN(value)) {  
-    return 0;  
-}  
-         var numberFormat = sap.ui.core.format.NumberFormat.getIntegerInstance({  
-             maxIntegerDigits: 10,  
-             minIntegerDigits: 1,  
-             maxFractionDigits: 2,  
-             minFractionDigits: 2,  
-             groupingEnabled: true  
-         });  
-         return numberFormat.format(value);  
-*new sap.ui.commons.Label({text: "Total days"}),
-*/
+var oDatePicker1 = new sap.ui.commons.DatePicker('date1');
+oDatePicker1.setYyyymmdd("20100101");
+oDatePicker1.setLocale("en-US"); // Try with "de" or "fr" instead!
+oDatePicker1.attachChange(
+		function(oEvent){
+			if(oEvent.getParameter("invalidValue")){
+				oEvent.oSource.setValueState(sap.ui.core.ValueState.Error);
+			}else{
+				oEvent.oSource.setValueState(sap.ui.core.ValueState.None);
+			}
+		}
+);
+var oDatePicker2 = new sap.ui.commons.DatePicker('date2');
+oDatePicker2.setYyyymmdd("20100101");
+oDatePicker2.setLocale("en-US"); // Try with "de" or "fr" instead!
+oDatePicker2.attachChange(
+		function(oEvent){
+			if(oEvent.getParameter("invalidValue")){
+				oEvent.oSource.setValueState(sap.ui.core.ValueState.Error);
+			}else{
+				oEvent.oSource.setValueState(sap.ui.core.ValueState.None);
+			}
+		}
+);
+var arrival = new sap.ui.table.Column({
+	label: new sap.ui.commons.Label({text: "Arrival"}),
+	template: oDatePicker1,
+	sortProperty: "arrival",
+	filterProperty: "arrival",
+	width: "90px"
+});
+var departure = new sap.ui.table.Column({
+	label: new sap.ui.commons.Label({text: "Departure"}),
+	template: oDatePicker2,
+	sortProperty: "departure",
+	filterProperty: "departure",
+	width: "90px"
+});
+oPortTable.addColumn(arrival);
+oPortTable.addColumn(departure);
 
 window.oPortTable = oPortTable;
 oPortTable.setModel(oModel);
