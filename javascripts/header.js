@@ -152,17 +152,17 @@ var Header = function(){
 									new sap.ui.commons.Label({text:"Vessel:"}),
 									oLink1,
 									new sap.ui.commons.Label({text:"Laycan:"}),
-									new sap.ui.commons.TextField({value:"4"}),
+									new sap.ui.commons.TextField({value:"4",editable : false}),
 									new sap.ui.commons.Label({text:"Mode:"}),
-									new sap.ui.commons.TextField({value:"Eco"}),
+									new sap.ui.commons.TextField({value:"Eco",editable : false}),
 									new sap.ui.commons.Label({text:"Ballast:"}),
-									new sap.ui.commons.TextField({value:"12"}),
+									new sap.ui.commons.TextField({value:"12",editable : false}),
 									new sap.ui.commons.Label({text:"Laden:"}),
-									new sap.ui.commons.TextField({value:"14"}),
+									new sap.ui.commons.TextField({value:"14",editable : false}),
 									new sap.ui.commons.Label({text:"FO Type:"}),
-									new sap.ui.commons.TextField({value:"380"}),
+									new sap.ui.commons.TextField({value:"380",editable : false}),
 									new sap.ui.commons.Label({text:"DO Type:"}),
-									new sap.ui.commons.TextField({value:"DMA"})
+									new sap.ui.commons.TextField({value:"DMA",editable : false})
 						]
 					}),
 					new sap.ui.layout.form.FormElement({
@@ -172,15 +172,15 @@ var Header = function(){
 									new sap.ui.commons.Label({text:""}),
 									//new sap.ui.commons.TextField({value:""}),
 									new sap.ui.commons.Label({text:"Mode:"}),
-									new sap.ui.commons.TextField({value:"Eco"}),
+									new sap.ui.commons.TextField({value:"Eco",editable : false}),
 									new sap.ui.commons.Label({text:"Ballast:"}),
-									new sap.ui.commons.TextField({value:"12"}),
+									new sap.ui.commons.TextField({value:"12",editable : false}),
 									new sap.ui.commons.Label({text:"Laden:"}),
-									new sap.ui.commons.TextField({value:"14"}),
+									new sap.ui.commons.TextField({value:"14",editable : false}),
 									new sap.ui.commons.Label({text:"FO Type:"}),
-									new sap.ui.commons.TextField({value:"380"}),
+									new sap.ui.commons.TextField({value:"380",editable : false}),
 									new sap.ui.commons.Label({text:"DO Type:"}),
-									new sap.ui.commons.TextField({value:"DMA"})
+									new sap.ui.commons.TextField({value:"DMA",editable : false})
 						]
 					})
 				]
