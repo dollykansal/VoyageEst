@@ -332,8 +332,8 @@ oPortTable.addColumn(new sap.ui.table.Column("portChg",{
 	template: oPortTabPortChg,
 	width: "40px" }));
 
-oPortTable.addColumn(window.helper.createColumn("arrival", "Arrival", "40px", "TF"));
-oPortTable.addColumn(window.helper.createColumn("departure", "Departure", "40px", "TF"));
+//oPortTable.addColumn(window.helper.createColumn("arrival", "Arrival", "40px", "TF"));
+//oPortTable.addColumn(window.helper.createColumn("departure", "Departure", "40px", "TF"));
 /*if (isNaN(value)) {  
     return 0;  
 }  
