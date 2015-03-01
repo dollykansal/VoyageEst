@@ -35,29 +35,17 @@ sap.ui.controller("voyageest.Estimate", {
 //
 //	}
 	selectVessel: function(rowNo) {
-		console.log("row no >>>",rowNo);
-		var data = sap.ui.getCore().getModel("vessel").getData()['data1']; 
-		var vesselMasterData = sap.ui.getCore().getModel("vesselMaster").getData()['modelData'];
-		console.log("master data",vesselMasterData);
-		var aData = {mv:vesselMasterData[parseInt(rowNo)].vesselName,type:"",dwt:vesselMasterData[parseInt(rowNo)].dwt,draft:""};
-		data[0] = aData;
-		console.log("data >>",data);
-		sap.ui.getCore().getModel("vessel").setData("data1",aData);
-		// this is the vessel selected
-		// now change the selection in second table as well
-		// get the vessel name done
-		// push it to oData ( new json model to be defined here)
-//		var aDataVess = [];
-//		var oModel = new sap.ui.model.json.JSONModel();
-//		aDataVess.push({mv: vesselname});
-//		oModel.setData({modelData: aDataVess});
-		//get reference to the table in the final_vessel.js and do binding
-//		var panel =  sap.ui.getCore().byId("estViewId"); //.setContent(sap.ui.getCore().byId("estViewID"),true);
-//		var panel = this.getView().getContent()[1];
-//		var matrix = panel.getContent()[0];
-//		var table1 = ((matrix.getRows()[0]).getCells()[0]).getContent()[0];
-		//console.log(view1.byId("iddemo"));
-//		table1.setModel(oModel); 
+		var vesselMasterData = sap.ui.getCore().getModel("vesselMaster").getData()['modelData'][rowNo];
+		var data1_new = [{mv:vesselMasterData.vesselName,vesselType:vesselMasterData.vesselType,dwt:vesselMasterData.dwt,draft:vesselMasterData.draft}];
+		var data2_new = [{ballast: vesselMasterData.ballast, laden: vesselMasterData.laden}];
+		var data3_new =[
+					{vesselName: "DO", dieselType: vesselMasterData.doDieselType, sea: vesselMasterData.dosea, idle: vesselMasterData.doidle, work: vesselMasterData.dowork},
+			        {vesselName: "LSDO", dieselType: vesselMasterData.lsdoDieselType, sea: vesselMasterData.lsdosea, idle: vesselMasterData.lsdoidle, work: vesselMasterData.lsdowork}];
+		var data4_new = [
+		    {vesselName: "FO", fuelType: vesselMasterData.fotype, ballast: vesselMasterData.foballast, laden: vesselMasterData.foladen, idle: vesselMasterData.foidle, work: vesselMasterData.fowork},
+			{vesselName: "LSFO", fuelType: vesselMasterData.lsfotype, ballast: vesselMasterData.lsfoballast, laden: vesselMasterData.lsfoladen, idle: vesselMasterData.lsfoidle, work: vesselMasterData.lsfowork}
+		];
+		sap.ui.getCore().getModel("vessel").setData({data1: data1_new,data2:data2_new,data3:data3_new,data4:data4_new});
 	},
 	
 	getSelectedVessel: function() {
