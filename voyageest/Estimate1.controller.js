@@ -43,7 +43,13 @@ sap.ui.controller("voyageest.Estimate1", {
 		if (!isNaN(modelSumm.getProperty("/brkg"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/brkg"));};
 		if (!isNaN(modelSumm.getProperty("/frTax"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/frTax"));};
 		if (!isNaN(modelSumm.getProperty("/linTerm"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/linTerm"));};
-		
+		if (!isNaN(modelSumm.getProperty("/demDes"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/demDes"));};
+		if (!isNaN(modelSumm.getProperty("/cev"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/cev"));};
+		if (!isNaN(modelSumm.getProperty("/ilohc"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/ilohc"));};
+		if (!isNaN(modelSumm.getProperty("/ballbonus"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/ballbonus"));};
+		if (!isNaN(modelSumm.getProperty("/routServ"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/routServ"));};
+		if (!isNaN(modelSumm.getProperty("/others"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/others"));};
+		if (!isNaN(modelSumm.getProperty("/portCharg"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/portCharg"));};
 		console.log ("operation expense total :", total);
 		modelSumm.setProperty("/opExp",total);
 		var rev = modelSumm.getProperty("/rev");
@@ -286,5 +292,47 @@ sap.ui.controller("voyageest.Estimate1", {
 		if (isNaN(totExp)){totExp = 0.0;}
 		modelSumm.setProperty("/totProfit", (totRev - totExp) );
 		sap.ui.getCore().setModel(modelSumm,"modelSumm"); 
+	},
+///////////////////////////////calculate total dem////////////////////////////////////////////////////////	
+	calTotalDemDes: function() {
+		var oPortTable = window.oPortTable;
+		var nRows = oPortTable.getBinding("rows").getLength();  
+		var data = oPortTable.getModel().getData()['modelData'];
+		var oTotalDem = 0.0;
+		var oTotalDes = 0.0;
+		for (var i = 0; i < nRows; i++) { 
+			if (isNaN(data[i]['dem'])){}
+			else{
+				oTotalDem = parseFloat(oTotalDem) + parseFloat (data[i]['dem']);
+			}	
+		}  
+		for (var i = 0; i < nRows; i++) { 
+			if (isNaN(data[i]['des'])){}
+			else{
+				oTotalDes = parseFloat(oTotalDes) + parseFloat (data[i]['des']);
+			}	
+		}  
+		var model = this.getModel('modelSumm');
+		model.setProperty("/demDes", (parseFloat(oTotalDes) - parseFloat(oTotalDem)) );
+		sap.ui.getCore().setModel(model,"modelSumm");
+		this.calculateOperationExpense();
+	},
+///////////////////////////////calculate total port charge////////////////////////////////////////////////////////	
+	calTotalPortCharg: function() {
+		var oPortTable = window.oPortTable;
+		var nRows = oPortTable.getBinding("rows").getLength();  
+		var data = oPortTable.getModel().getData()['modelData'];
+		var oTotal = 0.0;
+		for (var i = 0; i < nRows; i++) { 
+			if (isNaN(data[i]['portChg'])){}
+			else{
+				oTotal = parseFloat(oTotal) + parseFloat (data[i]['portChg']);
+			}	
+		}  
+		var model = this.getModel('modelSumm');
+		model.setProperty("/portCharg", oTotal );
+		sap.ui.getCore().setModel(model,"modelSumm");
+		this.calculateOperationExpense();
 	}
+	
 });

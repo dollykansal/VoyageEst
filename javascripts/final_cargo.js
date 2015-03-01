@@ -1,9 +1,9 @@
 var Cargo = function(oController){
 /////////////////////////////////////////second table - cargo  ///////////////////////////////////////////////////////////////////
 	var aDataCargo = [
-	                  {sNo: "1", account: "Seafuture", cargoNam: "Hot Coil", qty:"32,000.00", term: "FIO"}
+	                  // {sNo: "1", account: "Seafuture", cargoNam: "Hot Coil", qty:"32,000.00", term: "FIO"}
 	                  ];
-	
+
 	//Create a panel instance
 	var oPanelCargo = new sap.ui.commons.Panel({
 		width : "100%"
@@ -24,7 +24,7 @@ var Cargo = function(oController){
 	});
 	oButtonFS.addStyleClass("myGraphBtn");
 	oPanelCargo.addButton( oButtonFS);
-	
+
 	//Function to create the dialog with fragments
 	var oDialogFragment = sap.ui.jsfragment("frtsim.fragments.JSFragmentDialog");
 
@@ -38,22 +38,33 @@ var Cargo = function(oController){
 			items: [ 
 			        new sap.ui.commons.Button({text: "Clear", press: function() { alert("Clear Button pressed!"); }}),
 			        new sap.ui.commons.Button({text: "Append", press: function() { 
-			    	  var modelData = oModel.getData();  
-		              var rowCount   = modelData.modelData.length;    
-		              rowCount = rowCount + 1;  
-		              aDataCargo.push({sNo: rowCount,}); // Push data to Model  
-		              oModel.setData({modelData: aDataCargo}); // Set Model  
-		              oTableCargo.visibleRowCount=oTableCargo.visibleRowCount+1;
-		              oModel.refresh();
-			        }}),
-			        new sap.ui.commons.Button({text: "Insert",style: sap.ui.commons.ButtonStyle.Accept,  press: function() { 
-			        	var modelData = this.getModel().getData(); 
+			        	var modelData = oModelCargo.getData();  
 			        	var rowCount   = modelData.modelData.length;    
 			        	rowCount = rowCount + 1;  
-			        	aDataCargo.push({sNo: rowCount, cargoNam: " "}); // Push data to Model  
-			        	oModel.setData({modelData: aDataCargo}); // Set Model  
-			        	oTableCargo.setVisibleRowCount(oTableCargo.getVisibleRowCount()+1);
-			        	oModel.refresh();
+			        	aDataCargo.push({sNo: rowCount,}); // Push data to Model  
+			        	oModelCargo.setData({modelData: aDataCargo}); // Set Model  
+			        	oTableCargo.visibleRowCount=oTableCargo.visibleRowCount+1;
+			        	oModelCargo.refresh();
+			        }}),
+			        new sap.ui.commons.Button({text: "Insert",style: sap.ui.commons.ButtonStyle.Accept,  press: function() { 
+			        	var idx = oTableCargo.getSelectedIndex(); 
+			        	if (idx != -1) {
+			        		var modelData = oModelCargo.getData();  
+			        		var rowCount   = modelData.modelData.length;   
+			        		rowCount = rowCount + 1;  
+			        		var temp = aDataCargo[idx]; 
+			        		aDataCargo[idx] = {sNo: rowCount};
+			        		for (i = idx+1; i <= rowCount-1; i++) {
+			        			var temp1 = aDataCargo[i];
+			        			aDataCargo[i] = temp; 
+			        			temp = temp1;
+			        		};
+			        		oModelCargo.setData({modelData: aDataCargo}); // Set Model  
+			        		oTableCargo.visibleRowCount=oTableCargo.visibleRowCount+1;
+			        		oModelCargo.refresh();
+			        	} else {
+			        		alert("Please select a row!");
+			        	} 
 			        }}) , 
 			        new sap.ui.commons.Button({text: "Delete",style: sap.ui.commons.ButtonStyle.Reject,  press: function() {
 			        	var idx = oTableCargo.getSelectedIndex();
@@ -62,80 +73,109 @@ var Cargo = function(oController){
 			        		var data = m.getData()['modelData'];
 			        		var removed = data.splice(idx, 1);
 			        		m.setData({modelData: data});
-//			        		m.setData(data);
-//			        		sap.m.MessageToast.show(JSON.stringify(removed[0]) +  'is removed');
-			        	} else {
-//			        		sap.m.MessageToast.show('Please select a row');
+			        	} else { alert("Please select a row!");
 			        	}
 			        }}) ,  
-			        new sap.ui.commons.Button({text: "Move up", press: function() { alert("Move up Button pressed!"); }}),
-			        new sap.ui.commons.Button({text: "Move down", press: function() { alert("Move down Button pressed!"); }}),
-			       // new sap.ui.commons.Button({text: "Frt. Sim.",style: sap.ui.commons.ButtonStyle.Emph, press: function() { oDialogFragment.open(); }}) //calling fragment
-			        //new sap.ui.commons.Button({text: "Frt. Sim.", press: function() { openFrtSim(); }})
-			        ]}),
+			        new sap.ui.commons.Button({text: "Move up", press: function() 
+			        	{ 
+			        	var idx = oTableCargo.getSelectedIndex();
+			        	if (idx != 0) {
+			        		var m = oTableCargo.getModel();
+			        		var data = m.getData()['modelData'];
+			        		var temp = data[idx-1]; //2
+			        		data[idx-1] = data[idx]; //3
+			        		data[idx]= temp; //2
+			        		m.refresh();
+			        		m.setData({modelData: data});
+			        	} else {
+			        		alert("Please select a row!");
+			        	} 
+
+			        	}}),
+			        	new sap.ui.commons.Button({text: "Move down", press: function() {
+			        		var idx = oTableCargo.getSelectedIndex();
+
+			        		var modelData = oModelCargo.getData();  
+			        		var rowCount   = modelData.modelData.length;    
+			        		if (idx != -1 && !(idx>=rowCount-1)) {
+			        			var m = oTableCargo.getModel();
+			        			var data = m.getData()['modelData'];
+			        			var temp = data[idx+1]; //2
+			        			data[idx+1] = data[idx]; //3
+			        			data[idx]= temp; //2
+			        			m.refresh();
+			        			m.setData({modelData: data});
+			        		} else {
+			        			alert("Please select a row!");
+			        		}
+
+			        	} }),
+			        	// new sap.ui.commons.Button({text: "Frt. Sim.",style: sap.ui.commons.ButtonStyle.Emph, press: function() { oDialogFragment.open(); }}) //calling fragment
+			        	//new sap.ui.commons.Button({text: "Frt. Sim.", press: function() { openFrtSim(); }})
+			        	]}),
 	});
 
 	var oTableCargoLoadPort = new sap.ui.commons.TextField({   
-    	id: "oTableCargoLoadPort",
-    	change : function(oEvent){
-    		var changedValue = this.getValue();
-    		var id = this.getId();
-    		var idArr = id.split("-");
-    		var rowIndex = idArr[2].split("row")[1];
-    		var model = oTableCargo.getModel();
-    		var data = oTableCargo.getModel().getData()['modelData'];
-    		data[rowIndex]['loadPort']=changedValue;
-    		model.setData({modelData: data});
-    		model.refresh();
-    		if(changedValue!=""){
-	    		var portModelData = sap.ui.getCore().getModel("port").getData()['modelData']; 
-	    		var rowObj = oController.checkIfRowExist(portModelData,rowIndex,"Loading");
-	    		var rowCount   = portModelData.length;   //4 
-	    		if(rowObj["result"]){
-	    			var prod = rowObj["product"];
-	    			prod['coord'] = changedValue;
-	    			portModelData[rowObj["index"]] = prod;
-	    		}else{
-	    			portModelData[rowCount] = {sNo:rowCount+1,cType:"Loading", coord: changedValue,cargoRow:rowIndex};
-	    		}
-	    		sap.ui.getCore().getModel("port").setData("modelData",portModelData);
-//	        	portModel.setData({modelData: portModelData}); // Set Model  
-//	        	window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
-//	        	portModel.refresh();
-    		}
-    	}
-    });
+		id: "oTableCargoLoadPort",
+		change : function(oEvent){
+			var changedValue = this.getValue();
+			var id = this.getId();
+			var idArr = id.split("-");
+			var rowIndex = idArr[2].split("row")[1];
+			var model = oTableCargo.getModel();
+			var data = oTableCargo.getModel().getData()['modelData'];
+			data[rowIndex]['loadPort']=changedValue;
+			model.setData({modelData: data});
+			model.refresh();
+			if(changedValue!=""){
+				var portModelData = sap.ui.getCore().getModel("port").getData()['modelData']; 
+				var rowObj = oController.checkIfRowExist(portModelData,rowIndex,"Loading");
+				var rowCount   = portModelData.length;   //4 
+				if(rowObj["result"]){
+					var prod = rowObj["product"];
+					prod['coord'] = changedValue;
+					portModelData[rowObj["index"]] = prod;
+				}else{
+					portModelData[rowCount] = {sNo:rowCount+1,cType:"Loading", coord: changedValue,cargoRow:rowIndex};
+				}
+				sap.ui.getCore().getModel("port").setData("modelData",portModelData);
+//				portModel.setData({modelData: portModelData}); // Set Model  
+//				window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
+//				portModel.refresh();
+			}
+		}
+	});
 	oTableCargoLoadPort.bindProperty("value", "loadPort");
 	var oTableCargoDisPort = new sap.ui.commons.TextField({   
-    	id: "oTableCargoDisPort",
-    	change : function(oEvent){
-    		var changedValue = this.getValue();
-    		var id = this.getId();
-    		var idArr = id.split("-");
-    		var rowIndex = idArr[2].split("row")[1];
-    		var model = oTableCargo.getModel();
-    		var data = oTableCargo.getModel().getData()['modelData'];
-    		data[rowIndex]['disPort']=changedValue;
-    		model.setData({modelData: data});
-    		model.refresh();
-    		if(changedValue!=""){
-	    		var portModelData = sap.ui.getCore().getModel("port").getData()['modelData'];
-	    		var rowObj = oController.checkIfRowExist(portModelData,rowIndex,"Discharging");
-	    		var rowCount   = portModelData.length;   //4 
-	    		if(rowObj["result"]){
-	    			var prod = rowObj["product"];
-	    			prod['coord'] = changedValue;
-	    			portModelData[rowObj["index"]] = prod;
-	    		}else{
-	    			portModelData[rowCount] = {sNo:rowCount+1,cType:"Discharging", coord: changedValue,cargoRow:rowIndex};
-	    		}
-	    		sap.ui.getCore().getModel("port").setData("modelData",portModelData);
-//	        	portModel.setData({modelData: portModelData}); // Set Model  
-//	        	window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
-//	        	portModel.refresh();
-    		}
-    	}
-    });
+		id: "oTableCargoDisPort",
+		change : function(oEvent){
+			var changedValue = this.getValue();
+			var id = this.getId();
+			var idArr = id.split("-");
+			var rowIndex = idArr[2].split("row")[1];
+			var model = oTableCargo.getModel();
+			var data = oTableCargo.getModel().getData()['modelData'];
+			data[rowIndex]['disPort']=changedValue;
+			model.setData({modelData: data});
+			model.refresh();
+			if(changedValue!=""){
+				var portModelData = sap.ui.getCore().getModel("port").getData()['modelData'];
+				var rowObj = oController.checkIfRowExist(portModelData,rowIndex,"Discharging");
+				var rowCount   = portModelData.length;   //4 
+				if(rowObj["result"]){
+					var prod = rowObj["product"];
+					prod['coord'] = changedValue;
+					portModelData[rowObj["index"]] = prod;
+				}else{
+					portModelData[rowCount] = {sNo:rowCount+1,cType:"Discharging", coord: changedValue,cargoRow:rowIndex};
+				}
+				sap.ui.getCore().getModel("port").setData("modelData",portModelData);
+//				portModel.setData({modelData: portModelData}); // Set Model  
+//				window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
+//				portModel.refresh();
+			}
+		}
+	});
 	oTableCargoDisPort.bindProperty("value", "distPort");
 	var oCarTabqty = new sap.ui.commons.TextField({   
 		id: "oCarTabqty",
@@ -166,7 +206,7 @@ var Cargo = function(oController){
 		}
 	});
 	oCarTabqty.bindProperty("value", "qty");
-	
+
 	var oCarTabfrt = new sap.ui.commons.TextField({   
 		id: "oCarTabfrt",
 		change : function(oEvent){
@@ -200,7 +240,7 @@ var Cargo = function(oController){
 	oTableCargo.addColumn(window.helper.createColumn("sNo", "SNo", "20px", "TV"));
 	oTableCargo.addColumn(window.helper.createColumn("account", "Account", "40px", "TF"));
 	oTableCargo.addColumn(window.helper.createColumn("cargoNam", "Cargo Name", "40px", "TF"));
-	
+
 	oTableCargo.addColumn(new sap.ui.table.Column("loadPort",{
 		label: new sap.ui.commons.Label({text: "Loading Port"}), 
 		template: oTableCargoLoadPort,
@@ -209,14 +249,14 @@ var Cargo = function(oController){
 		label: new sap.ui.commons.Label({text: "Discharging Port"}), 
 		template: oTableCargoDisPort,
 		width: "40px" }));
-	
+
 //	oTableCargo.addColumn(window.helper.createColumn("loadPort", "Loading Port", "40px", "TF"));
 //	oTableCargo.addColumn(window.helper.createColumn("disPort", "Discharging Port", "40px", "TF"));
 	oTableCargo.addColumn(new sap.ui.table.Column("qty",{
 		label: new sap.ui.commons.Label({text: "Quantity"}), 
 		template: oCarTabqty,
 		width: "40px" }));
-	
+
 	oTableCargo.addColumn(new sap.ui.table.Column("frt",{
 		label: new sap.ui.commons.Label({text: "Frt"}), 
 		template: oCarTabfrt,
@@ -258,7 +298,7 @@ var Cargo = function(oController){
 		template: oCarTabrev,
 		width: "40px" }));
 	//oTableCargo.addColumn(window.helper.createColumn("rev", "Revenue", "40px", "TF"));
-	
+
 	var oCarTabAcomm = new sap.ui.commons.TextField({   
 		id: "oCarTabAcomm",
 		change : function(oEvent){
@@ -286,7 +326,7 @@ var Cargo = function(oController){
 		label: new sap.ui.commons.Label({text: "A.Comm"}), 
 		template: oCarTabAcomm,
 		width: "40px" }));
-	
+
 	//oTableCargo.addColumn(window.helper.createColumn("addComm", "A.Comm", "40px", "TF"));
 	//oTableCargo.addColumn(window.helper.createColumn("brkg", "Brkg", "40px", "TF"));
 	var oCarTabBrkg = new sap.ui.commons.TextField({   
@@ -310,7 +350,7 @@ var Cargo = function(oController){
 		label: new sap.ui.commons.Label({text: "Brkg"}), 
 		template: oCarTabBrkg,
 		width: "40px" }));
-	
+
 	//oTableCargo.addColumn(window.helper.createColumn("frtTax", "Frt Tax", "40px", "TF"));
 	var oCarTabFrtTax = new sap.ui.commons.TextField({   
 		id: "oCarTabFrtTax",
@@ -333,7 +373,7 @@ var Cargo = function(oController){
 		label: new sap.ui.commons.Label({text: "Frt Tax"}), 
 		template: oCarTabFrtTax,
 		width: "40px" }));
-	
+
 	//oTableCargo.addColumn(window.helper.createColumn("linTerm", "Liner Term", "40px", "TF"));
 
 	var oCarTabLinTerm = new sap.ui.commons.TextField({   
@@ -351,114 +391,114 @@ var Cargo = function(oController){
 
 
 	//Create a model and bind the table rows to this model
-	var oModel = new sap.ui.model.json.JSONModel();
-	
-	oModel.setData({modelData: aDataCargo});
-	oTableCargo.setModel(oModel);
+	var oModelCargo = new sap.ui.model.json.JSONModel();
+
+	oModelCargo.setData({modelData: aDataCargo});
+	oTableCargo.setModel(oModelCargo);
 	oTableCargo.bindRows("/modelData");
-	    
+
 
 	//Initially sort the table
 	oTableCargo.sort(oTableCargo.getColumns()[0]);
 	oTableCargo.onAfterRendering = function() {
 		sap.ui.table.Table.prototype.onAfterRendering.apply(this, arguments);
-    	$('#cargo').droppable({
-	      drop:function(event, ui){
-	        console.log(ui);
-	        var text1 = null;
-	        var text2 = null;
-	        var text3 = null;
-	        var text4 = null;
-	        	
-	        if(ui.helper.context.children[1]==undefined){
-	        	console.log("entering");
-	        	var id = ui.helper.context.id;
-	        	$("#"+id+"-hdr").trigger("click");
-//	        	console.log("#"+id+"-cont span");
-//	        	console.log(ui.helper.context.children[1].children);
-	        	console.log($($("#"+id+"-cont span")));
-	        	setTimeout(function(){
-	        		text1 = $($("#"+id+"-cont span")[0]).text();
-		        	text2 = $($("#"+id+"-cont span")[1]).text();
-		        	text3 = $($("#"+id+"-cont span")[2]).text();
-		        	text4 = $($("#"+id+"-cont span")[3]).text();
-		        	var modelData = oModel.getData();  
-			        var rowCount   = modelData.modelData.length;
-			        aDataCargo.push({sNo:rowCount+1,account: text1,cargoNam:text2,loadPort:text3,distPort:text4}); // Push data to Model  
-		        	oModel.setData({modelData: aDataCargo}); // Set Model  
-		        	oModel.refresh();
-		        	
-		        	var portModelData = sap.ui.getCore().getModel("port").getData()['modelData'];
-		    		var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Loading");
-		    		var rowCount1   = portModelData.length;   //4 
-		    		if(rowObj["result"]){
-		    			var prod = rowObj["product"];
-		    			prod['coord'] = text3;
-		    			portModelData[rowObj["index"]] = prod;
-		    		}else{
-		    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Loading", coord: text3,cargoRow:rowCount};
-		    		}
-		    		sap.ui.getCore().getModel("port").setData("modelData",portModelData);
-//		        	portModel.setData({modelData: portModelData}); // Set Model  
-//		        	window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
-//		        	portModel.refresh();
-		        	
-		        	var portModelData = sap.ui.getCore().getModel("port").getData()['modelData'];
-		    		var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Discharging");
-		    		var rowCount1   = portModelData.length;   //4 
-		    		if(rowObj["result"]){
-		    			var prod = rowObj["product"];
-		    			prod['coord'] = text4;
-		    			portModelData[rowObj["index"]] = prod;
-		    		}else{
-		    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Discharging", coord: text4,cargoRow:rowCount};
-		    		}
-		    		sap.ui.getCore().getModel("port").setData("modelData",portModelData);
-//		        	portModel.setData({modelData: portModelData}); // Set Model  
-//		        	portModel.refresh();
-	        	},100);
-	        }else{
-	        	var children = ui.helper.context.children[1].children;
-	        	text1 = $(children[0]).text();
-	        	text2 = $(children[1]).text();
-	        	text3 = $(children[2]).text();
-	        	text4 = $(children[3]).text();
-	       
-	        var modelData = oModel.getData();  
-	        var rowCount   = modelData.modelData.length;
-	        aDataCargo.push({sNo:rowCount+1,account: text1,cargoNam:text2,loadPort:text3,distPort:text4}); // Push data to Model  
-        	oModel.setData({modelData: aDataCargo}); // Set Model  
-        	oModel.refresh();
-        	
-    		var portModelData = sap.ui.getCore().getModel("port").getData()['modelData']; 
-    		var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Loading");
-    		var rowCount1   = portModelData.length;   //4 
-    		console.log("row obj",rowObj);
-    		if(rowObj["result"]){
-    			var prod = rowObj["product"];
-    			prod['coord'] = text3;
-    			portModelData[rowObj["index"]] = prod;
-    		}else{
-    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Loading", coord: text3,cargoRow:rowCount};
-    		}
-    		sap.ui.getCore().getModel("port").setData("modelData",portModelData);
+		$('#cargo').droppable({
+			drop:function(event, ui){
+				console.log(ui);
+				var text1 = null;
+				var text2 = null;
+				var text3 = null;
+				var text4 = null;
 
-    		var portModelData = sap.ui.getCore().getModel("port").getData()['modelData'];  
-    		var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Discharging");
-    		var rowCount1   = portModelData.length;   //4 
-    		if(rowObj["result"]){
-    			var prod = rowObj["product"];
-    			prod['coord'] = text4;
-    			portModelData[rowObj["index"]] = prod;
-    		}else{
-    			portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Discharging", coord: text4,cargoRow:rowCount};
-    		}
-    		sap.ui.getCore().getModel("port").setData("modelData",portModelData);
-	        }
-	      }
-	    });
-	  };
-	
+				if(ui.helper.context.children[1]==undefined){
+					console.log("entering");
+					var id = ui.helper.context.id;
+					$("#"+id+"-hdr").trigger("click");
+//					console.log("#"+id+"-cont span");
+//					console.log(ui.helper.context.children[1].children);
+					console.log($($("#"+id+"-cont span")));
+					setTimeout(function(){
+						text1 = $($("#"+id+"-cont span")[0]).text();
+						text2 = $($("#"+id+"-cont span")[1]).text();
+						text3 = $($("#"+id+"-cont span")[2]).text();
+						text4 = $($("#"+id+"-cont span")[3]).text();
+						var modelData = oModelCargo.getData();  
+						var rowCount   = modelData.modelData.length;
+						aDataCargo.push({sNo:rowCount+1,account: text1,cargoNam:text2,loadPort:text3,distPort:text4}); // Push data to Model  
+						oModelCargo.setData({modelData: aDataCargo}); // Set Model  
+						oModelCargo.refresh();
+
+						var portModelData = sap.ui.getCore().getModel("port").getData()['modelData'];
+						var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Loading");
+						var rowCount1   = portModelData.length;   //4 
+						if(rowObj["result"]){
+							var prod = rowObj["product"];
+							prod['coord'] = text3;
+							portModelData[rowObj["index"]] = prod;
+						}else{
+							portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Loading", coord: text3,cargoRow:rowCount};
+						}
+						sap.ui.getCore().getModel("port").setData("modelData",portModelData);
+//						portModel.setData({modelData: portModelData}); // Set Model  
+//						window.oPortTable.setVisibleRowCount(window.oPortTable.getVisibleRowCount()+1);
+//						portModel.refresh();
+
+						var portModelData = sap.ui.getCore().getModel("port").getData()['modelData'];
+						var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Discharging");
+						var rowCount1   = portModelData.length;   //4 
+						if(rowObj["result"]){
+							var prod = rowObj["product"];
+							prod['coord'] = text4;
+							portModelData[rowObj["index"]] = prod;
+						}else{
+							portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Discharging", coord: text4,cargoRow:rowCount};
+						}
+						sap.ui.getCore().getModel("port").setData("modelData",portModelData);
+//						portModel.setData({modelData: portModelData}); // Set Model  
+//						portModel.refresh();
+					},100);
+				}else{
+					var children = ui.helper.context.children[1].children;
+					text1 = $(children[0]).text();
+					text2 = $(children[1]).text();
+					text3 = $(children[2]).text();
+					text4 = $(children[3]).text();
+
+					var modelData = oModelCargo.getData();  
+					var rowCount   = modelData.modelData.length;
+					aDataCargo.push({sNo:rowCount+1,account: text1,cargoNam:text2,loadPort:text3,distPort:text4}); // Push data to Model  
+					oModelCargo.setData({modelData: aDataCargo}); // Set Model  
+					oModelCargo.refresh();
+
+					var portModelData = sap.ui.getCore().getModel("port").getData()['modelData']; 
+					var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Loading");
+					var rowCount1   = portModelData.length;   //4 
+					console.log("row obj",rowObj);
+					if(rowObj["result"]){
+						var prod = rowObj["product"];
+						prod['coord'] = text3;
+						portModelData[rowObj["index"]] = prod;
+					}else{
+						portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Loading", coord: text3,cargoRow:rowCount};
+					}
+					sap.ui.getCore().getModel("port").setData("modelData",portModelData);
+
+					var portModelData = sap.ui.getCore().getModel("port").getData()['modelData'];  
+					var rowObj = oController.checkIfRowExist(portModelData,rowCount,"Discharging");
+					var rowCount1   = portModelData.length;   //4 
+					if(rowObj["result"]){
+						var prod = rowObj["product"];
+						prod['coord'] = text4;
+						portModelData[rowObj["index"]] = prod;
+					}else{
+						portModelData[rowCount1] = {sNo:rowCount1+1,cType:"Discharging", coord: text4,cargoRow:rowCount};
+					}
+					sap.ui.getCore().getModel("port").setData("modelData",portModelData);
+				}
+			}
+		});
+	};
+
 	window.cargo = oTableCargo;
 	oPanelCargo.addContent(oTableCargo);
 	return oPanelCargo;

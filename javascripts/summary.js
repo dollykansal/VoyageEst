@@ -2,7 +2,7 @@ var summary = function(oController){
 	var aData = [];
 	var oModel = new sap.ui.model.json.JSONModel();
 	oModel.setData({modelData: aData});
-
+	var oZero = 0.0;
 	//Create a panel instance
 	var oPanel1 = new sap.ui.commons.Panel({
 		width : "370px"
@@ -22,7 +22,8 @@ var summary = function(oController){
 
 	//Create a simple form within the layout
 	var oLabel = new sap.ui.commons.Label({
-		text : 'Dem/Des'
+		text : 'Dem/Des',
+		tooltip: 'Total amount of Demurrage/Despatch money occured during the voyage'
 	});
 
 	var oInput = new sap.ui.commons.TextField({
@@ -32,7 +33,8 @@ var summary = function(oController){
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'Bunker Expense'
+		text : 'Bunker Expense',
+		tooltip: 'Total bunker expense for this voyage'
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
@@ -46,7 +48,8 @@ var summary = function(oController){
 
 	//Create a simple form within the layout
 	var oLabel = new sap.ui.commons.Label({
-		text : 'Add Comm.'
+		text : 'Add Comm.',
+		tooltip: 'Total amount of Address Commission inputted in Cargo'
 	});
 
 	var oInput = new sap.ui.commons.TextField("aComm",{
@@ -56,19 +59,31 @@ var summary = function(oController){
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'C.E.V'
+		text : 'C.E.V',
+		tooltip: 'CEV'
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
-		width : '100%'
+		width : '100%',
+		change:function(oEvent){
+			var modelSumm = oController.getModel('modelSumm');
+			if(this.getValue!=undefined && this.getValue()!=''){
+				modelSumm.setProperty("/cev",this.getValue());
+			}
+			else{
+				modelSumm.setProperty("/cev",oZero);
+			}
+			sap.ui.getCore().setModel(modelSumm, "modelSumm"); 
+			oController.calculateOperationExpense();
+		}
 	});
 	oLabel.setLabelFor(oInput);
 	oMatrixOper.createRow(oLabel, oInput, oLabel1, oInput1);
 
 	//Create a simple form within the layout
 	var oLabel = new sap.ui.commons.Label({
-		text : 'Brokerage'
+		text : 'Brokerage',
+		tooltip: 'Total amount of Brokerage inputted in Cargo'
 	});
 	var oInput = new sap.ui.commons.TextField({
 		value : "{modelSumm>/brkg}",
@@ -77,12 +92,23 @@ var summary = function(oController){
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'ILOHC'
+		text : 'ILOHC',
+		tooltip: 'Input ILOHC for this voyage'
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
-		width : '100%'
+		width : '100%',
+		change:function(oEvent){
+			var modelSumm = oController.getModel('modelSumm');
+			if(this.getValue!=undefined && this.getValue()!=''){
+				modelSumm.setProperty("/ilohc",this.getValue());
+			}
+			else{
+				modelSumm.setProperty("/ilohc",oZero);
+			}
+			sap.ui.getCore().setModel(modelSumm, "modelSumm"); 
+			oController.calculateOperationExpense();
+		}
 	});
 	oLabel.setLabelFor(oInput);
 	oMatrixOper.createRow(oLabel, oInput, oLabel1, oInput1);
@@ -98,12 +124,23 @@ var summary = function(oController){
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'Ballast Bonus'
+		text : 'Ballast Bonus',
+		tooltip: 'Input Ballast Bonus, if any'
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
-		width : '100%'
+		width : '100%',
+		change:function(oEvent){
+			var modelSumm = oController.getModel('modelSumm');
+			if(this.getValue!=undefined && this.getValue()!=''){
+				modelSumm.setProperty("/ballbonus",this.getValue());
+			}
+			else{
+				modelSumm.setProperty("/ballbonus",oZero);
+			}
+			sap.ui.getCore().setModel(modelSumm, "modelSumm"); 
+			oController.calculateOperationExpense();
+		}
 	});
 	oLabel.setLabelFor(oInput);
 	oMatrixOper.createRow(oLabel, oInput, oLabel1, oInput1);
@@ -119,12 +156,23 @@ var summary = function(oController){
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'Routing Service'
+		text : 'Routing Service',
+		tooltip: 'Input Routing Service charge occured, if any'
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
-		width : '100%'
+		width : '100%',
+		change:function(oEvent){
+			var modelSumm = oController.getModel('modelSumm');
+			if(this.getValue!=undefined && this.getValue()!=''){
+				modelSumm.setProperty("/routServ",this.getValue());
+			}
+			else{
+				modelSumm.setProperty("/routServ",oZero);
+			}
+			sap.ui.getCore().setModel(modelSumm, "modelSumm"); 
+			oController.calculateOperationExpense();
+		}
 	});
 	oLabel.setLabelFor(oInput);
 	oMatrixOper.createRow(oLabel, oInput, oLabel1, oInput1);
@@ -134,19 +182,29 @@ var summary = function(oController){
 		text : 'Port Charge'
 	});
 	var oInput = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/portCharg}",		
 		editable : false,
 		width : '100%'
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
-		text : 'Others'
+		text : 'Others',
+		tooltip: 'Input any other costs occured during the voyage'
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
-		editable : false,
-		width : '100%'
+		width : '100%',
+		change:function(oEvent){
+			var modelSumm = oController.getModel('modelSumm');
+			if(this.getValue!=undefined && this.getValue()!=''){
+				modelSumm.setProperty("/others",this.getValue());
+			}
+			else{
+				modelSumm.setProperty("/others",oZero);
+			}
+			sap.ui.getCore().setModel(modelSumm, "modelSumm"); 
+			oController.calculateOperationExpense();
+		}
 	});
 	oLabel.setLabelFor(oInput);
 	oMatrixOper.createRow(oLabel, oInput, oLabel1, oInput1);

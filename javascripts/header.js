@@ -164,8 +164,8 @@ var Header = function(){
 									new sap.ui.commons.Label({text:"DO Type:"}),
 									new sap.ui.commons.TextField({value:"DMA",editable : false})
 						]
-					}),
-					new sap.ui.layout.form.FormElement({
+					})
+					/*new sap.ui.layout.form.FormElement({
 						//label: new sap.ui.commons.Label({text: "Name", layoutData: new sap.ui.layout.form.GridElementData({hCells: "2"})}),
 						fields: [
 									new sap.ui.commons.Label({text:""}),
@@ -182,7 +182,7 @@ var Header = function(){
 									new sap.ui.commons.Label({text:"DO Type:"}),
 									new sap.ui.commons.TextField({value:"DMA",editable : false})
 						]
-					})
+					})*/
 				]
 			})
 		]

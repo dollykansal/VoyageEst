@@ -28,7 +28,7 @@ sap.ui.jsview("voyageest.Estimate1", {
 		//var treetable = new TreeTableHelper();
 		var tblPortRot = new TblPortRot(oController);
 		oLayoutM.createRow(cargo,{height: "auto"} );
-		oLayoutM.createRow(tblPortRot,{height: "300px"} ); //{height: "300px"}, 
+		oLayoutM.createRow(tblPortRot,{height: "200px"} ); //{height: "300px"}, 
 		
 		var oLayoutH = new sap.ui.commons.layout.MatrixLayout({
 				id : "matrix2",layoutFixed : true,
@@ -39,7 +39,7 @@ sap.ui.jsview("voyageest.Estimate1", {
 		});
 		oLayoutH.createRow(demand, oLayoutM);
 		
-		var button1 = new sap.ui.commons.Button({ 
+/*		var button1 = new sap.ui.commons.Button({ 
 			text: "Go back to Vessel Selection",
 		   press : function() {
 			   sap.ui.localResources("voyage1");
@@ -54,10 +54,10 @@ sap.ui.jsview("voyageest.Estimate1", {
 						 
 			alert('Alert from Back button' );
 					}
-				});
+				});*/
 		var oSummary = new summary(oController);
 		
-		return [button1,header, oDivider1,oLayoutH,oSummary];;
+		return [header, oDivider1,oLayoutH,oSummary];
 	
 	}
 

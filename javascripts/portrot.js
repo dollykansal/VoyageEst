@@ -4,7 +4,8 @@ var aData = [
 ];
 //Create a panel instance
 var oPanel = new sap.ui.commons.Panel({
-  width : "100%"
+  width : "100%",
+  height: "210px"
 });
 oPanel.setText("Port Rotation");
 
@@ -48,7 +49,7 @@ new sap.ui.table.Column({
 //////////////////////////////////////////////////////////////////////////////////
 //Create an instance of the table control
 var oPortTable = window.helper.createTable({
-  visibleRowCount: 5,
+  visibleRowCount: 3,
   toolbar: new sap.ui.commons.Toolbar({
     items: [ 
             new sap.ui.commons.Button({text: "Clear", press: function() { alert("Clear Button pressed!"); }}),
@@ -289,9 +290,47 @@ oPortTable.addColumn(new sap.ui.table.Column({
 
 oPortTable.addColumn(window.helper.createColumn("ldrate", "L/D Rate", "40px", "TF"));
 oPortTable.addColumn(window.helper.createColumn("portiw", "Port(I/W)", "40px", "TF"));
-oPortTable.addColumn(window.helper.createColumn("dem", "Dem", "40px", "TF"));
-oPortTable.addColumn(window.helper.createColumn("des", "Des", "40px", "TF"));
-oPortTable.addColumn(window.helper.createColumn("portChg", "Port charge", "40px", "TF"));
+//oPortTable.addColumn(window.helper.createColumn("dem", "Dem", "40px", "TF"));
+var oPortTableDem = new sap.ui.commons.TextField({   
+	id: "oPortTableDem",
+	change : function(oEvent){
+			oController.calTotalDemDes();
+	}
+});
+oPortTableDem.bindProperty("value", "dem");
+
+oPortTable.addColumn(new sap.ui.table.Column("dem",{
+	label: new sap.ui.commons.Label({text: "Dem"}), 
+	template: oPortTableDem,
+	width: "40px" }));
+//oPortTable.addColumn(window.helper.createColumn("des", "Des", "40px", "TF"));
+var oPortTableDes = new sap.ui.commons.TextField({   
+	id: "oPortTableDes",
+	change : function(oEvent){
+			oController.calTotalDemDes();
+	}
+});
+oPortTableDes.bindProperty("value", "des");
+
+oPortTable.addColumn(new sap.ui.table.Column("des",{
+	label: new sap.ui.commons.Label({text: "Des"}), 
+	template: oPortTableDes,
+	width: "40px" }));
+
+//oPortTable.addColumn(window.helper.createColumn("portChg", "Port charge", "40px", "TF"));
+var oPortTabPortChg = new sap.ui.commons.TextField({   
+	id: "oPortTabPortChg",
+	change : function(oEvent){
+			oController.calTotalPortCharg();
+	}
+});
+oPortTabPortChg.bindProperty("value", "portChg");
+
+oPortTable.addColumn(new sap.ui.table.Column("portChg",{
+	label: new sap.ui.commons.Label({text: "Port charge"}), 
+	template: oPortTabPortChg,
+	width: "40px" }));
+
 oPortTable.addColumn(window.helper.createColumn("arrival", "Arrival", "40px", "TF"));
 oPortTable.addColumn(window.helper.createColumn("departure", "Departure", "40px", "TF"));
 /*if (isNaN(value)) {  
