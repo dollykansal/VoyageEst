@@ -151,18 +151,20 @@ var Header = function(){
 						fields: [
 									new sap.ui.commons.Label({text:"Vessel:"}),
 									oLink1,
-									new sap.ui.commons.Label({text:"Laycan:"}),
-									new sap.ui.commons.TextField({value:"4",editable : false}),
 									new sap.ui.commons.Label({text:"Mode:"}),
 									new sap.ui.commons.TextField({value:"Eco",editable : false}),
-									new sap.ui.commons.Label({text:"Ballast:"}),
-									new sap.ui.commons.TextField({value:"12",editable : false}),
-									new sap.ui.commons.Label({text:"Laden:"}),
-									new sap.ui.commons.TextField({value:"14",editable : false}),
-									new sap.ui.commons.Label({text:"FO Type:"}),
+									new sap.ui.commons.Label({text:"FO Type:",textAlign : sap.ui.core.TextAlign.Right}),
 									new sap.ui.commons.TextField({value:"380",editable : false}),
-									new sap.ui.commons.Label({text:"DO Type:"}),
-									new sap.ui.commons.TextField({value:"DMA",editable : false})
+									new sap.ui.commons.Label({text:"FO Laden:",textAlign : sap.ui.core.TextAlign.Right}),
+									new sap.ui.commons.TextField({value:"12",editable : false}),
+									new sap.ui.commons.Label({text:"LSFO Laden:",textAlign : sap.ui.core.TextAlign.Right}),
+									new sap.ui.commons.TextField({value:"14",editable : false}),
+									new sap.ui.commons.Label({text:"DO Type:",textAlign : sap.ui.core.TextAlign.Right}),
+									new sap.ui.commons.TextField({value:"DMB",editable : false}),
+									new sap.ui.commons.Label({text:"DO:", textAlign : sap.ui.core.TextAlign.Right}),
+									new sap.ui.commons.TextField({value:"25",editable : false}),
+									new sap.ui.commons.Label({text:"LSDO:",textAlign : sap.ui.core.TextAlign.Right}),
+									new sap.ui.commons.TextField({value:"20",editable : false})
 						]
 					})
 					/*new sap.ui.layout.form.FormElement({

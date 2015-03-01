@@ -52,7 +52,7 @@ var oPortTable = window.helper.createTable({
   visibleRowCount: 3,
   toolbar: new sap.ui.commons.Toolbar({
     items: [ 
-            new sap.ui.commons.Button({text: "Clear", press: function() { alert("Clear Button pressed!"); }}),
+          //  new sap.ui.commons.Button({text: "Clear", press: function() { alert("Clear Button pressed!"); }}),
             new sap.ui.commons.Button({text: "Insert",style: sap.ui.commons.ButtonStyle.Accept, press: function() {
               //alert("Append Button pressed!");
               var idx = oPortTable.getSelectedIndex(); //2 = second last row, total rows :4

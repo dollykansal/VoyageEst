@@ -36,16 +36,8 @@ var Cargo = function(oController){
 //		firstVisibleRow: 1,
 		toolbar: new sap.ui.commons.Toolbar({
 			items: [ 
-			        new sap.ui.commons.Button({text: "Clear", press: function() { alert("Clear Button pressed!"); }}),
-			        new sap.ui.commons.Button({text: "Append", press: function() { 
-			        	var modelData = oModelCargo.getData();  
-			        	var rowCount   = modelData.modelData.length;    
-			        	rowCount = rowCount + 1;  
-			        	aDataCargo.push({sNo: rowCount,}); // Push data to Model  
-			        	oModelCargo.setData({modelData: aDataCargo}); // Set Model  
-			        	oTableCargo.visibleRowCount=oTableCargo.visibleRowCount+1;
-			        	oModelCargo.refresh();
-			        }}),
+			      //  new sap.ui.commons.Button({text: "Clear", press: function() { alert("Clear Button pressed!"); }}),
+
 			        new sap.ui.commons.Button({text: "Insert",style: sap.ui.commons.ButtonStyle.Accept,  press: function() { 
 			        	var idx = oTableCargo.getSelectedIndex(); 
 			        	if (idx != -1) {
@@ -66,6 +58,15 @@ var Cargo = function(oController){
 			        		alert("Please select a row!");
 			        	} 
 			        }}) , 
+			        new sap.ui.commons.Button({text: "Append",style: sap.ui.commons.ButtonStyle.Accept, press: function() { 
+			        	var modelData = oModelCargo.getData();  
+			        	var rowCount   = modelData.modelData.length;    
+			        	rowCount = rowCount + 1;  
+			        	aDataCargo.push({sNo: rowCount,}); // Push data to Model  
+			        	oModelCargo.setData({modelData: aDataCargo}); // Set Model  
+			        	oTableCargo.visibleRowCount=oTableCargo.visibleRowCount+1;
+			        	oModelCargo.refresh();
+			        }}),
 			        new sap.ui.commons.Button({text: "Delete",style: sap.ui.commons.ButtonStyle.Reject,  press: function() {
 			        	var idx = oTableCargo.getSelectedIndex();
 			        	if (idx != -1) {
