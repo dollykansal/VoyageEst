@@ -36,17 +36,25 @@ sap.ui.controller("voyageest.Estimate1", {
 	calculateOperationExpense: function(){
 		var modelSumm = null;
 		modelSumm = this.getModel('modelSumm');
-		var total = 0.0;
+		var total = 0;
 		
-		if (!isNaN(modelSumm.getProperty("/sumBunkExp"))){total += modelSumm.getProperty("/sumBunkExp");};
-		if (!isNaN(modelSumm.getProperty("/aComm"))){total += modelSumm.getProperty("/aComm");};
-		if (!isNaN(modelSumm.getProperty("/brkg"))){total += modelSumm.getProperty("/brkg");};
-		if (!isNaN(modelSumm.getProperty("/frTax"))){total += modelSumm.getProperty("/frTax");};
+		if (!isNaN(modelSumm.getProperty("/sumBunkExp"))){total = parseFloat(total)+parseFloat(modelSumm.getProperty("/sumBunkExp"));};
+		if (!isNaN(modelSumm.getProperty("/aComm"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/aComm"));};
+		if (!isNaN(modelSumm.getProperty("/brkg"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/brkg"));};
+		if (!isNaN(modelSumm.getProperty("/frTax"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/frTax"));};
+		if (!isNaN(modelSumm.getProperty("/linTerm"))){total = parseFloat(total)+ parseFloat(modelSumm.getProperty("/linTerm"));};
+		
 		console.log ("operation expense total :", total);
 		modelSumm.setProperty("/opExp",total);
 		var rev = modelSumm.getProperty("/rev");
 		if(isNaN(rev)){rev = 0.0;}
 		modelSumm.setProperty("/opProfit",rev - total); 
+		
+		var totDays = this.getModel('model').getProperty("/totDays");
+		if(totDays!=undefined && totDays!=''){
+			modelSumm.setProperty("/cBase",((rev - total) / totDays));
+		}
+		
 		sap.ui.getCore().setModel(modelSumm,"modelSumm"); 
 		this.calcTotExp(null,total);
 	},
@@ -64,7 +72,7 @@ sap.ui.controller("voyageest.Estimate1", {
 		}
 		return row;
 	},
-	onCargoChange: function(oAddComm, oBrkg, oFrtTax, oRev) {
+	onCargoChange: function(oAddComm, oBrkg, oFrtTax, oRev,oLinTerm) {
 		var model = null;
 
 		if(sap.ui.getCore().getModel('modelSumm')!=null){
@@ -91,7 +99,12 @@ sap.ui.controller("voyageest.Estimate1", {
 			this.calculateOperationExpense();
 			modelSumm.setProperty("/opProfit",oRev - modelSumm.getProperty("/opExp") );
 		}
-		sap.ui.getCore().setModel(model, "modelSumm");    
+		if(oLinTerm!=null){
+			model.setProperty("/linTerm", oLinTerm);
+			this.calculateOperationExpense();
+		}
+		sap.ui.getCore().setModel(model, "modelSumm");  
+		
 		this.calTotProfit();
 	},
 ///////////////////////////////generic method for getting model handler////////////////////////////////////////////////////////
@@ -121,16 +134,43 @@ sap.ui.controller("voyageest.Estimate1", {
 		var model = this.getModel('model');
 		model.setProperty("/totDays", oTotal);
 		var modelSumm = this.getModel('modelSumm');
-		var laden = this.calcFoExpense();
-		var foCons = oTotal * laden;
+		//var laden = this.calcFoExpense();
+		var response = this.calcFoExpense();
+		
+		var foCons = oTotal * response['laden'];
+		var lsfoCons = oTotal * response['lsfoLaden'];
+		
+		var sea = oTotal * response['sea'];
+		var lsdoSea = oTotal * response['lsdoSea'];
+		
 		modelSumm.setProperty("/FoCons", foCons);
+		modelSumm.setProperty("/lsFoCons", lsfoCons);
+		modelSumm.setProperty("/DoCons", sea);
+		modelSumm.setProperty("/lsDoCons", lsdoSea);
+		
 		var price = modelSumm.getProperty("/FoPrice");
+		var lsFoPrice = modelSumm.getProperty("/lsFoPrice");
+		var doPrice = modelSumm.getProperty("/DoPrice");
+		var lsDoPrice = modelSumm.getProperty("/lsDoPrice");
 		
 		var total = 0.0;
 		if(price!=undefined && price!=''){
 			modelSumm.setProperty("/FoExpense",(modelSumm.getProperty("/FoCons")*price));
 		}
+		if(lsFoPrice!=undefined && lsFoPrice!=''){
+			modelSumm.setProperty("/lsFoExpense",(modelSumm.getProperty("/lsFoCons")*lsFoPrice));
+		}
+		if(doPrice!=undefined && doPrice!=''){
+			modelSumm.setProperty("/DoExpense",(modelSumm.getProperty("/DoCons")*doPrice));
+		}
+		if(lsDoPrice!=undefined && lsDoPrice!=''){
+			modelSumm.setProperty("/lsDoExpense",(modelSumm.getProperty("/lsDoCons")*lsDoPrice));
+		}
 		
+		var opProfit = modelSumm.getProperty("/opProfit");
+		if(oTotal!=undefined && oTotal!=''){
+			modelSumm.setProperty("/cBase",(opProfit / oTotal));
+		}
 		sap.ui.getCore().setModel(modelSumm,"modelSumm"); 
 		sap.ui.getCore().setModel(model, "model"); 
 		
@@ -140,7 +180,8 @@ sap.ui.controller("voyageest.Estimate1", {
 	calcFoExpense: function() {
 		
 		var model = null;
-
+		var response = {};
+		
 		if(sap.ui.getCore().getModel('vessel')!=null){
 			model = sap.ui.getCore().getModel('vessel');
 		}else{
@@ -148,7 +189,15 @@ sap.ui.controller("voyageest.Estimate1", {
 		}
 		
 		var laden = model.getData()['data4'][0]['laden'];
-		return laden;
+		var lsfoLaden = model.getData()['data4'][1]['laden'];
+		
+		var sea =  model.getData()['data3'][0]['sea'];
+		var lsdoSea =  model.getData()['data3'][1]['sea'];
+		response['laden'] = laden;
+		response['lsfoLaden'] = lsfoLaden;
+		response['sea'] = sea;
+		response['lsdoSea'] = lsdoSea;
+		return response;
 		
 		console.log("laden value:",data,":datata",model.getData()['data4'][0] );
 	},

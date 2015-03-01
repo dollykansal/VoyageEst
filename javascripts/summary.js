@@ -113,7 +113,7 @@ var summary = function(oController){
 		text : 'Liner Terms'
 	});
 	var oInput = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/linTerm}",
 		editable : false,
 		width : '100%'
 	});
@@ -206,8 +206,17 @@ var summary = function(oController){
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
-		width : '100%'
+		width : '100%',
+		change:function(oEvent){
+			var modelSumm = oController.getModel('modelSumm');
+			modelSumm.setProperty("/DoPrice",this.getValue());
+			var cons = modelSumm.getProperty("/DoCons");
+			if(this.getValue!=undefined && this.getValue()!=''&&cons!=undefined && cons!=''){
+				modelSumm.setProperty("/DoExpense",(this.getValue()*cons));
+			}
+			sap.ui.getCore().setModel(modelSumm, "modelSumm"); 
+			oController.sumBunkExp();
+		}
 	});
 	oLabel.setLabelFor(oInputPrice);
 	oMatrixB.createRow(oLabel, oInputPrice, oLabel1, oInput1);
@@ -230,7 +239,7 @@ var summary = function(oController){
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/DoCons}",
 		editable : false,
 		width : '100%'
 	});
@@ -290,7 +299,7 @@ var summary = function(oController){
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/DoExpense}",
 		editable : false,
 		width : '100%'
 	});
@@ -302,8 +311,18 @@ var summary = function(oController){
 		text : 'LSFO Price'
 	});
 	var oInput = new sap.ui.commons.TextField({
-		value : '0.00',
-		width : '100%'
+		width : '100%',
+		change:function(oEvent){
+			var modelSumm = oController.getModel('modelSumm');
+			modelSumm.setProperty("/lsFoPrice",this.getValue());
+			var cons = modelSumm.getProperty("/lsFoCons");
+			if(this.getValue!=undefined && this.getValue()!=''&&cons!=undefined && cons!=''){
+				modelSumm.setProperty("/lsFoExpense",(this.getValue()*cons));
+			}
+			sap.ui.getCore().setModel(modelSumm, "modelSumm"); 
+			oController.sumBunkExp();
+		}
+	
 	});
 	//Create 3rd and 4th columns
 	var oLabel1 = new sap.ui.commons.Label({
@@ -311,8 +330,17 @@ var summary = function(oController){
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
-		width : '100%'
+		width : '100%',
+		change:function(oEvent){
+			var modelSumm = oController.getModel('modelSumm');
+			modelSumm.setProperty("/lsDoPrice",this.getValue());
+			var cons = modelSumm.getProperty("/lsDoCons");
+			if(this.getValue!=undefined && this.getValue()!=''&&cons!=undefined && cons!=''){
+				modelSumm.setProperty("/lsDoExpense",(this.getValue()*cons));
+			}
+			sap.ui.getCore().setModel(modelSumm, "modelSumm"); 
+			oController.sumBunkExp();
+		}
 	});
 	oLabel.setLabelFor(oInput);
 	oMatrixB.createRow(oLabel, oInput, oLabel1, oInput1);
@@ -322,7 +350,7 @@ var summary = function(oController){
 		text : 'LSFO Consumption'
 	});
 	var oInput = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/lsFoCons}",
 		editable : false,
 		width : '100%'
 	});
@@ -332,7 +360,7 @@ var summary = function(oController){
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/lsDoCons}",
 		editable : false,
 		width : '100%'
 	});
@@ -344,7 +372,7 @@ var summary = function(oController){
 		text : 'LSFO Expense'
 	});
 	var oInput = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/lsFoExpense}",
 		width : '100%',
 		editable : false
 	});
@@ -354,7 +382,7 @@ var summary = function(oController){
 	});
 
 	var oInput1 = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/lsDoExpense}",
 		editable : false,
 		width : '100%'
 	});
@@ -466,10 +494,11 @@ var summary = function(oController){
 
 	//Create a simple form within the layout
 	var oLabel = new sap.ui.commons.Label({
-		text : 'C/Base'
+		text : 'C/Base',
+		tooltip: 'Daily earning amount after deducting the req operation costs from operation profit \n(Charter Base = Oper Profit/Total duration)'
 	});
 	var oInput = new sap.ui.commons.TextField({
-		value : '0.00',
+		value : "{modelSumm>/cBase}",
 		editable : false,
 		width : '100%'
 	});

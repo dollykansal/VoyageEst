@@ -162,7 +162,7 @@ var Cargo = function(oController){
 			if(data[rowIndex]['frtTax']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var frtTax = (data[rowIndex]['frtTax'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(addComm,brkge,frtTax,rev);
+			oController.onCargoChange(addComm,brkge,frtTax,rev,null);
 		}
 	});
 	oCarTabqty.bindProperty("value", "qty");
@@ -192,7 +192,7 @@ var Cargo = function(oController){
 			if(data[rowIndex]['frtTax']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var frtTax = (data[rowIndex]['frtTax'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(addComm,brkge,frtTax,rev);
+			oController.onCargoChange(addComm,brkge,frtTax,rev,null);
 		}
 	});
 	oCarTabfrt.bindProperty("value", "frt");
@@ -249,7 +249,7 @@ var Cargo = function(oController){
 			if(data[rowIndex]['frtTax']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var frtTax = (data[rowIndex]['frtTax'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(addComm,brkge,frtTax,data[rowIndex]['rev']);
+			oController.onCargoChange(addComm,brkge,frtTax,data[rowIndex]['rev'],null);
 		}
 	});
 	oCarTabrev.bindProperty("value", "rev");
@@ -278,7 +278,7 @@ var Cargo = function(oController){
 			if(data[rowIndex]['frtTax']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var frtTax = (data[rowIndex]['frtTax'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(addComm,brkge,frtTax,data[rowIndex]['rev']);
+			oController.onCargoChange(addComm,brkge,frtTax,data[rowIndex]['rev'],null);
 		}
 	});
 	oCarTabAcomm.bindProperty("value", "addComm");
@@ -302,7 +302,7 @@ var Cargo = function(oController){
 			if(data[rowIndex]['brkge']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var brkge = (data[rowIndex]['brkge'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(null, brkge,null,null);
+			oController.onCargoChange(null, brkge,null,null,null);
 		}
 	});
 	oCarTabBrkg.bindProperty("value", "brkge");
@@ -325,7 +325,7 @@ var Cargo = function(oController){
 			if(data[rowIndex]['frtTax']!=undefined&&data[rowIndex]['rev']!=undefined){
 				var frtTax = (data[rowIndex]['frtTax'] * data[rowIndex]['rev'])/100;
 			}
-			oController.onCargoChange(null,null, frtTax,null);
+			oController.onCargoChange(null,null, frtTax,null,null);
 		}
 	});
 	oCarTabFrtTax.bindProperty("value", "frtTax");
@@ -334,9 +334,20 @@ var Cargo = function(oController){
 		template: oCarTabFrtTax,
 		width: "40px" }));
 	
-	oTableCargo.addColumn(window.helper.createColumn("linTerm", "Liner Term", "40px", "TF"));
+	//oTableCargo.addColumn(window.helper.createColumn("linTerm", "Liner Term", "40px", "TF"));
 
-
+	var oCarTabLinTerm = new sap.ui.commons.TextField({   
+		id: "oCarTabLinTerm",
+		change : function(oEvent){
+			var changedValue = this.getValue();
+			oController.onCargoChange(null,null, null,null,changedValue);
+		}
+	});
+	oCarTabLinTerm.bindProperty("value", "linTerm");
+	oTableCargo.addColumn(new sap.ui.table.Column("linTerm",{
+		label: new sap.ui.commons.Label({text: "Liner Term"}), 
+		template: oCarTabLinTerm,
+		width: "40px" }));
 
 
 	//Create a model and bind the table rows to this model
