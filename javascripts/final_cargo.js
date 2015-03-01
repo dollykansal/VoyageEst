@@ -3,7 +3,8 @@ var Cargo = function(oController){
 	var aDataCargo = [
 	                  // {sNo: "1", account: "Seafuture", cargoNam: "Hot Coil", qty:"32,000.00", term: "FIO"}
 	                  ];
-
+	var oModelCargo = new sap.ui.model.json.JSONModel();
+	oModelCargo.setData({modelData: aDataCargo});
 	//Create a panel instance
 	var oPanelCargo = new sap.ui.commons.Panel({
 		width : "100%"
@@ -79,14 +80,15 @@ var Cargo = function(oController){
 			        new sap.ui.commons.Button({text: "Move up", press: function() 
 			        	{ 
 			        	var idx = oTableCargo.getSelectedIndex();
+			        	console.log("index <<<<<",idx);
 			        	if (idx != 0) {
-			        		var m = oTableCargo.getModel();
-			        		var data = m.getData()['modelData'];
-			        		var temp = data[idx-1]; //2
-			        		data[idx-1] = data[idx]; //3
-			        		data[idx]= temp; //2
-			        		m.refresh();
-			        		m.setData({modelData: data});
+//			        		var data = oModelCargo.getData()['modelData']; 
+			        		var temp = aDataCargo[idx-1]; //2
+			        		aDataCargo[idx-1] = aDataCargo[idx]; //3
+			        		aDataCargo[idx]= temp; //2
+				        	oModelCargo.setData({modelData: aDataCargo}); // Set Model
+				        	console.log(oModelCargo.getData()["modelData"]);
+				        	oModelCargo.refresh();
 			        	} else {
 			        		alert("Please select a row!");
 			        	} 
@@ -391,9 +393,6 @@ var Cargo = function(oController){
 
 
 	//Create a model and bind the table rows to this model
-	var oModelCargo = new sap.ui.model.json.JSONModel();
-
-	oModelCargo.setData({modelData: aDataCargo});
 	oTableCargo.setModel(oModelCargo);
 	oTableCargo.bindRows("/modelData");
 

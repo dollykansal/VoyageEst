@@ -351,7 +351,7 @@ oPortTable.addColumn(window.helper.createColumn("departure", "Departure", "40px"
 //oPortTable.addColumn(window.helper.createColumn("des", "Des", "40px", "TF"));
 //oPortTable.addColumn(window.helper.createColumn("portChg", "Port charge", "40px", "TF"));
 var oDatePicker1 = new sap.ui.commons.DatePicker('date1');
-oDatePicker1.setYyyymmdd("20100101");
+//oDatePicker1.setYyyymmdd("20100101");
 oDatePicker1.setLocale("en-US"); // Try with "de" or "fr" instead!
 oDatePicker1.attachChange(
 		function(oEvent){
@@ -363,7 +363,7 @@ oDatePicker1.attachChange(
 		}
 );
 var oDatePicker2 = new sap.ui.commons.DatePicker('date2');
-oDatePicker2.setYyyymmdd("20100101");
+//oDatePicker2.setYyyymmdd("20100101");
 oDatePicker2.setLocale("en-US"); // Try with "de" or "fr" instead!
 oDatePicker2.attachChange(
 		function(oEvent){
