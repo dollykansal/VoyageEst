@@ -12,29 +12,33 @@ sap.ui.jsfragment("frtsim.fragments.JSFragmentDialog", {
 		oMatrix.setWidths('100px', '70px','100px', '70px');
 	
 		var oLabel1 = new sap.ui.commons.Label({
-			text : 'Daily Current Profit'
+			text : 'Daily Current Profit',
+			tooltip: "Daily Current Profit"
 		});
 		// create a simple Input field
-		var oInputCP = new sap.ui.commons.TextField('inputcp');
-		oInputCP.setValue("0.00");
-		oInputCP.setTooltip("Daily Current Profit");
+		var oInputCP = new sap.ui.commons.TextField('inputcp',{
+			value: "{modelSumm>/cBase}",
+			editable : false});
 		//oInputCP.attachChange(function(){alert('Text changed to :'+ oInputCP.getValue());});
 		oLabel1.setLabelFor(oInputCP);
 		//oMatrix.createRow(oLabel1, oInputCP);
 	
 		var oLabel2 = new sap.ui.commons.Label({
-			text : 'Total Current Profit'
+			text : 'Total Current Profit',
+			tooltip:"Total Current Profit"
 		});
-		var oInput2 = new sap.ui.commons.TextField('inputTot');
-		oInput2.setValue("0.00");
-		oInput2.setTooltip("Total Current Profit");
+		var oInput2 = new sap.ui.commons.TextField('inputTot',{
+			value: "{modelSumm>/totProfit}",
+			editable : false});
 		oLabel2.setLabelFor(oInput2);
 		oMatrix.createRow(oLabel1, oInputCP,oLabel2, oInput2);
 	
 		var oLabel3 = new sap.ui.commons.Label({
 			text : 'Daily Expected Profit'
 		});
-		var oInput3 = new sap.ui.commons.TextField('inputExP');
+		var oInput3 = new sap.ui.commons.TextField('inputExP',{
+			//value: "{modelSumm>/cBase}"
+			});
 		oInput3.setValue("0.00");
 		oInput3.setTooltip("Daily Expected Profit");
 		oLabel3.setLabelFor(oInput3);
@@ -43,7 +47,7 @@ sap.ui.jsfragment("frtsim.fragments.JSFragmentDialog", {
 		var oLabel4 = new sap.ui.commons.Label({
 			text : 'Total Expected Profit'
 		});
-		var oInput4 = new sap.ui.commons.TextField('inputTotExpP');
+		var oInput4 = new sap.ui.commons.TextField('inputTotExpP',{value: "{modelSumm>/totProfit}"});
 		oInput4.setValue("0.00");
 		oInput4.setTooltip("Total Expected Profit");
 		oLabel4.setLabelFor(oInput4);

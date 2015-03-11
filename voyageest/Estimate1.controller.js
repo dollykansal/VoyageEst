@@ -333,6 +333,65 @@ sap.ui.controller("voyageest.Estimate1", {
 		model.setProperty("/portCharg", oTotal );
 		sap.ui.getCore().setModel(model,"modelSumm");
 		this.calculateOperationExpense();
-	}
+	},
+///////////////////////////////calculate total rev,addcomm,brkg,frt tax, tot operexpense on Cargo////////////////////////////////////////////////////////	
+	calTotalRev: function() {
+		var oCargoTable = window.cargo;
+		var nRows = oCargoTable.getBinding("rows").getLength();  
+		var data = oCargoTable.getModel().getData()['modelData'];
+		var oTotal = 0.0;var addComm= 0.0; var brkge = 0.0; var frtTax = 0.0;
+		
+		for (var i = 0; i < nRows; i++) { 
+			if (isNaN(data[i]['rev'])){}
+			else{
+				oTotal = parseFloat(oTotal) + parseFloat (data[i]['rev']);
+				if(!isNaN((data[i]['addComm']))){addComm =  parseFloat(addComm) + parseFloat ((data[i]['addComm'] * data[i]['rev'])/100);}
+				if(!isNaN((data[i]['brkge']))){brkge = parseFloat(brkge)+ parseFloat((data[i]['brkge'] * data[i]['rev'])/100);}
+				if(!isNaN((data[i]['frtTax']))){frtTax = parseFloat(frtTax) + parseFloat((data[i]['frtTax'] * data[i]['rev'])/100);}
+				console.log("addcomm:",addComm);
+				console.log("brkge:",brkge);
+				console.log("rev:",oTotal);
+			}	
+		}  
+		var modelSumm = this.getModel('modelSumm');
+		if(!isNaN(addComm)){
+			modelSumm.setProperty("/aComm", addComm);
+			console.log("addcomm set:",addComm);
+		}
+		if(!isNaN(brkge)){
+			modelSumm.setProperty("/brkg", brkge);
+			console.log("brkge set:",brkge);
+		}
+		if(!isNaN(frtTax)){
+			modelSumm.setProperty("/frTax", frtTax);
+			console.log("frtTax set:",frtTax);
+		}
+		console.log("rev:",oTotal);
+		modelSumm.setProperty("/rev", oTotal );
+		sap.ui.getCore().setModel(modelSumm,"modelSumm");
+		
+		this.calculateOperationExpense();
+	},
+///////////////////////////////calculate total liner terms on Cargo////////////////////////////////////////////////////////	
+	calTotalLinTerm: function() {
+		var oCargoTable = window.cargo;
+		var nRows = oCargoTable.getBinding("rows").getLength();  
+		var data = oCargoTable.getModel().getData()['modelData'];
+		var oTotal = 0.0;
+		
+		for (var i = 0; i < nRows; i++) { 
+			if (isNaN(data[i]['linTerm'])){}
+			else{
+				oTotal = parseFloat(oTotal) + parseFloat (data[i]['linTerm']);
+			}	
+		}  
+		var modelSumm = this.getModel('modelSumm');
+		if(!isNaN(oTotal)){
+			modelSumm.setProperty("/linTerm", oTotal);
+		}
+		sap.ui.getCore().setModel(modelSumm,"modelSumm");
+		
+		this.calculateOperationExpense();
+	},
 	
 });

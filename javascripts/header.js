@@ -91,7 +91,7 @@ var Header = function(){
 	var oLink1 = new sap.ui.commons.Link({
 		text: "Seagate", 
 		tooltip: oQuickViewTemplate,
-		press: function() {alert('Alert from ' + oLink1.getText());}});
+		press: function() {return oQuickViewTemplate}});
 	
 /*	var oForm1 = new sap.ui.layout.form.Form("F1",{
 		title: new sap.ui.core.Title({text: "Vessel Header", tooltip: "Vessel Header", height: "20%"}),
